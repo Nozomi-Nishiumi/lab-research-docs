@@ -72,7 +72,26 @@
   .viz p{margin:0;font-size:13.5px;color:var(--muted);}
   @media(max-width:520px){.viz-head{flex-wrap:wrap;}.viz .thumb{flex:0 0 100%;}}
 
-  .foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);}
+  /* tool cards (AI連携) */
+  .toolhead{display:flex;align-items:center;gap:16px;padding:22px 26px 4px;}
+  .idx{font-family:var(--mono);font-weight:600;font-size:15px;color:#fff;background:var(--accent);width:38px;height:38px;flex:0 0 38px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+  .toolhead .tt{flex:1;}
+  .toolhead .name{display:block;font-family:var(--display);font-weight:700;font-size:20px;line-height:1.25;}
+  .toolhead .tsub{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;}
+  .free-tag{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:3px 11px;white-space:nowrap;background:color-mix(in srgb,var(--accent) 8%,transparent);}
+  .tool[data-t="copilot"]{--accent:#7A5CF0;}
+  .tool[data-t="posit"]{--accent:#1E6FD0;}
+  .tool.spine{border-left-color:var(--accent);}
+  .tool .card-body ol.steps>li::before{color:var(--accent);}
+  @media (max-width:560px){.toolhead{flex-wrap:wrap;}.free-tag{order:3;margin-left:54px;}}
+  /* big appendix reference */
+  .bigref{display:block;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--r);border-radius:14px;padding:20px 24px;margin:26px 0;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;}
+  a.bigref:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(19,26,43,.10);border-color:var(--line);border-left-color:var(--r);}
+  .bigref .no{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--r);}
+  .bigref h3{font-family:var(--display);font-size:19px;margin:6px 0 6px;color:var(--ink);}
+  .bigref p{margin:0;font-size:14px;color:var(--muted);}
+  .bigref .go{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--r);}
+    .foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);}
   a{color:var(--primary);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--primary) 35%,transparent);}
   a:hover{border-bottom-color:var(--primary);}
   .toc a,.cb a{border-bottom:none;}
@@ -85,14 +104,15 @@
 <div class="wrap">
 
   <p class="eyebrow">環境構築 · R / RStudio</p>
-  <h1>RStudio を入れて、<br>データを可視化する</h1>
-  <p class="lede">R 本体と RStudio の導入から、実際にデータを図にするサンプルコードまでをまとめた資料です。可視化は base R 同梱の <span class="mono">airquality</span> データ(1973年ニューヨークの大気観測)を使い、ggplot2 で一通り描きます。</p>
+  <h1>RStudio を入れて、<br>AIをつなぐ</h1>
+  <p class="lede">R 本体と RStudio の導入から、AI 連携までをまとめた資料です。実際にデータを図にするサンプルコードは、末尾リンクの別紙にまとめています。</p>
 
   <nav class="toc">
     <a href="#p1">01 R を入れる</a>
     <a href="#p2">02 RStudio を入れる</a>
     <a href="#p3">03 パッケージと動作確認</a>
-    <a href="#p4">04 可視化サンプル</a>
+    <a href="#p4">04 AI を連携する</a>
+    <a href="rstudio-visualization-sample.html">別紙 → 可視化サンプル</a>
     <a href="index.html">← 資料一覧</a>
   </nav>
 
@@ -157,134 +177,53 @@ ggplot(mpg, aes(displ, hwy)) + geom_point()</code></pre></div>
     </div>
   </div>
 
-  <!-- ===== PART 4 ===== -->
-  <div class="part" id="p4"><span class="no">PART 04</span><h2>可視化サンプル</h2><span class="rule"></span></div>
-  <p class="lede" style="margin-top:-8px">新規スクリプト(<span class="kbd">⇧⌘N</span> / <span class="kbd">Ctrl+Shift+N</span>)に貼り付け、各行で <span class="kbd">⌘⏎</span> / <span class="kbd">Ctrl+Enter</span> を押すと実行され、右下の <b>Plots</b> ペインに図が出ます。まず下準備を実行してから、各図のコードを試してください。</p>
+  <!-- ===== PART 4 : AI ===== -->
+  <div class="part" id="p4"><span class="no">PART 04</span><h2>AI を連携する</h2><span class="rule"></span></div>
+  <p class="lede" style="margin-top:-8px">RStudio には2系統の AI 連携があります。補完中心の GitHub Copilot と、データを見て動くエージェント Posit Assistant です。</p>
 
-  <div class="card spine">
+  <article class="card tool spine" data-t="copilot">
+    <div class="toolhead">
+      <span class="idx">01</span>
+      <div class="tt"><span class="name">GitHub Copilot</span><span class="tsub">補完タイプ・VS Code と同じ Copilot</span></div>
+      <span class="free-tag">学生・教員は無料 / 他は要サブスク</span>
+    </div>
     <div class="card-body">
-      <h3>下準備:パッケージ読み込みとデータ</h3>
-      <p class="sub">airquality に日付列を足しておく(折れ線グラフ用)</p>
-      <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>library(ggplot2)
-library(dplyr)
-
-<span class="cm"># airquality：1973年NYの大気観測（base R 同梱）</span>
-data(airquality)
-aq &lt;- airquality %&gt;%
-  mutate(Date = as.Date(paste(<span class="s">1973</span>, Month, Day, sep = <span class="s">"-"</span>)))</code></pre></div>
+      <ol class="steps">
+        <li><b>Tools → Global Options → Assistant</b> を開き、「Use code assistant」で <b>GitHub Copilot</b> を選ぶ。</li>
+        <li>案内に従って <b>Copilot Agent</b> のコンポーネントをインストール。</li>
+        <li><b>Sign In</b> を押し、表示された verification code を <span class="mono">github.com/login/device</span> に貼って <b>Authorize</b>。</li>
+        <li>ダイアログを閉じ、<span class="mono">.R</span> を開いてコードを書くと補完が出る。</li>
+      </ol>
+      <div class="note"><b>要件</b> ── GitHub アカウントと Copilot サブスク(Individuals / Business)。<b>学生・教員は GitHub Education で無料</b>。RStudio Desktop 2023.09.0 以降が必要。詳細は <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html" target="_blank" rel="noopener">RStudio の Copilot ドキュメント</a>。</div>
     </div>
-  </div>
+  </article>
 
-  <!-- 1 histogram -->
-  <div class="viz" style="--vc:#1E6FD0">
-    <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><g fill="#1E6FD0"><rect x="10" y="42" width="14" height="24"/><rect x="26" y="30" width="14" height="36"/><rect x="42" y="18" width="14" height="48"/><rect x="58" y="26" width="14" height="40"/><rect x="74" y="40" width="14" height="26"/><rect x="90" y="50" width="14" height="16"/></g></svg></div>
-      <div><h3>1. ヒストグラム</h3><p>1変数の分布。ここでは気温 <span class="mono">Temp</span> の頻度。</p></div>
+  <article class="card tool spine" data-t="posit">
+    <div class="toolhead">
+      <span class="idx">02</span>
+      <div class="tt"><span class="name">Posit Assistant</span><span class="tsub">チャット/エージェント・データを見て動く</span></div>
+      <span class="free-tag">モデルは持ち込み(BYOK)</span>
     </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp)) +
-  geom_histogram(binwidth = <span class="s">3</span>, fill = <span class="s">"#1E6FD0"</span>, color = <span class="s">"white"</span>) +
-  labs(title = <span class="s">"気温の分布"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"日数"</span>)</code></pre></div>
-  </div>
-
-  <!-- 2 bar -->
-  <div class="viz" style="--vc:#12857A">
-    <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><g fill="#12857A"><rect x="16" y="34" width="16" height="32"/><rect x="42" y="20" width="16" height="46"/><rect x="68" y="44" width="16" height="22"/><rect x="94" y="28" width="16" height="38"/></g></svg></div>
-      <div><h3>2. 棒グラフ</h3><p>カテゴリ別の集計値。月別の平均オゾン濃度。</p></div>
-    </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>aq %&gt;%
-  group_by(Month) %&gt;%
-  summarise(Ozone_mean = mean(Ozone, na.rm = <span class="s">TRUE</span>)) %&gt;%
-  ggplot(aes(x = factor(Month), y = Ozone_mean)) +
-  geom_col(fill = <span class="s">"#12857A"</span>) +
-  labs(title = <span class="s">"月別の平均オゾン濃度"</span>, x = <span class="s">"月"</span>, y = <span class="s">"平均オゾン (ppb)"</span>)</code></pre></div>
-  </div>
-
-  <!-- 3 line -->
-  <div class="viz" style="--vc:#E07B34">
-    <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><polyline points="10,50 28,40 46,52 64,26 82,34 104,16" fill="none" stroke="#E07B34" stroke-width="2.5"/></svg></div>
-      <div><h3>3. 折れ線グラフ</h3><p>時系列などの連続的な推移。日付ごとの気温。</p></div>
-    </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Date, y = Temp)) +
-  geom_line(color = <span class="s">"#E07B34"</span>) +
-  labs(title = <span class="s">"気温の推移"</span>, x = <span class="s">"日付"</span>, y = <span class="s">"気温 (°F)"</span>)</code></pre></div>
-  </div>
-
-  <!-- 4 scatter -->
-  <div class="viz" style="--vc:#3B3E9E">
-    <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><g fill="#3B3E9E"><circle cx="20" cy="52" r="3.2"/><circle cx="34" cy="46" r="3.2"/><circle cx="46" cy="50" r="3.2"/><circle cx="58" cy="36" r="3.2"/><circle cx="70" cy="40" r="3.2"/><circle cx="82" cy="26" r="3.2"/><circle cx="96" cy="30" r="3.2"/><circle cx="104" cy="20" r="3.2"/></g></svg></div>
-      <div><h3>4. 散布図</h3><p>2変数の関係。気温とオゾン濃度。</p></div>
-    </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp, y = Ozone)) +
-  geom_point(color = <span class="s">"#3B3E9E"</span>, alpha = <span class="s">0.7</span>) +
-  labs(title = <span class="s">"気温とオゾンの関係"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)</code></pre></div>
-  </div>
-
-  <!-- 5 scatter + regression -->
-  <div class="viz" style="--vc:#8E3B5E">
-    <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><line x1="12" y1="54" x2="108" y2="20" stroke="#8E3B5E" stroke-width="2.5"/><g fill="#3B3E9E"><circle cx="22" cy="50" r="3"/><circle cx="38" cy="48" r="3"/><circle cx="52" cy="40" r="3"/><circle cx="66" cy="38" r="3"/><circle cx="80" cy="28" r="3"/><circle cx="96" cy="26" r="3"/></g></svg></div>
-      <div><h3>5. 散布図 + 回帰直線</h3><p>関係に直線をあてる。<span class="mono">geom_smooth(method="lm")</span>。</p></div>
-    </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp, y = Ozone)) +
-  geom_point(alpha = <span class="s">0.6</span>) +
-  geom_smooth(method = <span class="s">"lm"</span>, se = <span class="s">TRUE</span>, color = <span class="s">"#8E3B5E"</span>) +
-  labs(title = <span class="s">"回帰：オゾン ~ 気温"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)
-
-<span class="cm"># 回帰係数・決定係数の確認</span>
-model &lt;- lm(Ozone ~ Temp, data = aq)
-summary(model)</code></pre></div>
-  </div>
-
-  <div class="card spine">
     <div class="card-body">
-      <h3>まとめて実行する</h3>
-      <p class="sub">全体を1つのスクリプトに。新規 <span class="mono">.R</span> ファイルに貼って保存すれば再利用できる</p>
-      <div class="cb"><div class="cb-head"><span class="cb-lang">R · sample-visualizations.R</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># ── パッケージ（初回のみ install.packages("tidyverse")）</span>
-library(ggplot2)
-library(dplyr)
-
-<span class="cm"># ── データ：airquality（1973年NYの大気観測・base R 同梱）</span>
-data(airquality)
-aq &lt;- airquality %&gt;%
-  mutate(Date = as.Date(paste(<span class="s">1973</span>, Month, Day, sep = <span class="s">"-"</span>)))
-
-<span class="cm"># 1. ヒストグラム</span>
-ggplot(aq, aes(Temp)) +
-  geom_histogram(binwidth = <span class="s">3</span>, fill = <span class="s">"#1E6FD0"</span>, color = <span class="s">"white"</span>) +
-  labs(title = <span class="s">"気温の分布"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"日数"</span>)
-
-<span class="cm"># 2. 棒グラフ</span>
-aq %&gt;% group_by(Month) %&gt;%
-  summarise(Ozone_mean = mean(Ozone, na.rm = <span class="s">TRUE</span>)) %&gt;%
-  ggplot(aes(factor(Month), Ozone_mean)) +
-  geom_col(fill = <span class="s">"#12857A"</span>) +
-  labs(title = <span class="s">"月別の平均オゾン濃度"</span>, x = <span class="s">"月"</span>, y = <span class="s">"平均オゾン (ppb)"</span>)
-
-<span class="cm"># 3. 折れ線グラフ</span>
-ggplot(aq, aes(Date, Temp)) +
-  geom_line(color = <span class="s">"#E07B34"</span>) +
-  labs(title = <span class="s">"気温の推移"</span>, x = <span class="s">"日付"</span>, y = <span class="s">"気温 (°F)"</span>)
-
-<span class="cm"># 4. 散布図</span>
-ggplot(aq, aes(Temp, Ozone)) +
-  geom_point(color = <span class="s">"#3B3E9E"</span>, alpha = <span class="s">0.7</span>) +
-  labs(title = <span class="s">"気温とオゾンの関係"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)
-
-<span class="cm"># 5. 散布図 + 回帰直線</span>
-ggplot(aq, aes(Temp, Ozone)) +
-  geom_point(alpha = <span class="s">0.6</span>) +
-  geom_smooth(method = <span class="s">"lm"</span>, se = <span class="s">TRUE</span>, color = <span class="s">"#8E3B5E"</span>) +
-  labs(title = <span class="s">"回帰：オゾン ~ 気温"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)
-
-summary(lm(Ozone ~ Temp, data = aq))</code></pre></div>
+      <p style="margin:0 0 12px;font-size:14.5px;color:var(--ink)">2026年に RStudio へ搭載された新しいデータサイエンス向けエージェント。<b>R セッションを見られる</b>のが強みで、コンソール出力・プロット・環境内の変数を踏まえて、探索的分析・データ整形・モデリングを手伝います。Claude Code のように別途設定しなくても、あなたのデータや図を「見た」うえで動きます。</p>
+      <ol class="steps">
+        <li>最近の RStudio に同梱。サイドバーの <b>Posit Assistant</b>(チャット)ペインを開く。</li>
+        <li>モデルプロバイダを構成:<b>Anthropic(Claude・API キー)/ GitHub Copilot / OpenAI / Posit AI</b> から選んでサインイン。</li>
+        <li>データを読み込んだ状態で、日本語で「この分布を可視化して」等と指示する。</li>
+      </ol>
+      <div class="note"><b>BYOK(持ち込み)</b> ── モデル利用料は各プロバイダに直接支払い(例:Anthropic の API キー、Copilot のサブスク)。有効化手順は版で変わるため、着手時に <a href="https://docs.posit.co/" target="_blank" rel="noopener">Posit のドキュメント</a>で現行版を確認のこと。</div>
     </div>
-  </div>
+  </article>
 
-  <p class="foot">
-    環境構築の資料の1つです。他の資料へは <a href="index.html">資料一覧</a> から移動できます。可視化を自分のデータに置き換える場合は、<span class="mono">aq</span> を自分のデータフレームに、<span class="mono">aes()</span> の列名を自分の変数名に替えるだけで流用できます。
+  <a class="bigref" href="rstudio-visualization-sample.html">
+    <span class="no">APPENDIX · 可視化サンプル</span>
+    <h3>別紙 — データを可視化するサンプルコード</h3>
+    <p>airquality を使って、ヒストグラム・棒・折れ線・散布図・回帰線を ggplot2 で描くコード集(コピーして実行)。</p>
+    <span class="go">別紙を開く →</span>
+  </a>
+
+    <p class="foot">
+    環境構築の資料の1つです。可視化のサンプルコードは <a href="rstudio-visualization-sample.html">別紙</a> にまとめています。他の資料へは <a href="index.html">資料一覧</a> から移動できます。
   </p>
 
 </div>
