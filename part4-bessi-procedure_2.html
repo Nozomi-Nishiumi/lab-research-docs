@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 02 別紙 — 実施手順書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EBEEF4;--panel:#FFFFFF;--ink:#131A2B;--muted:#5C6579;--line:#DCE1EA;
+    --primary:#3B3E9E;--code-bg:#0E1526;--code-ink:#D9E2F1;--code-dim:#7A88A8;
+    --a:#12857A;--b:#E07B34;--c:#3B3E9E;--alt:#8E3B5E;
+    --radius:14px;
+    --display:"Space Grotesk","Noto Sans JP",sans-serif;
+    --body:"Noto Sans JP",sans-serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.8;letter-spacing:.01em;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px;margin:0 auto;padding:52px 22px 96px;}
+
+  .doc-meta{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--alt);margin:0 0 12px;font-weight:600;}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1.2;margin:0 0 14px;letter-spacing:-.01em;}
+  .lede{color:var(--muted);font-size:15.5px;max-width:64ch;margin:0 0 26px;}
+  .ref{font-size:13px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:0 0 34px;}
+  .ref b{color:var(--ink);}
+
+  /* TOC */
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;margin:0 0 44px;}
+  .toc h2{font-family:var(--display);font-size:13px;letter-spacing:.04em;margin:0 0 10px;color:var(--muted);text-transform:uppercase;}
+  .toc ol{margin:0;padding-left:0;list-style:none;columns:2;column-gap:26px;}
+  @media(max-width:560px){.toc ol{columns:1;}}
+  .toc li{font-size:13.5px;padding:3px 0;break-inside:avoid;}
+  .toc .code{font-family:var(--mono);font-weight:600;font-size:12px;margin-right:8px;}
+
+  /* section headers */
+  .sec{margin:44px 0 18px;padding-top:14px;border-top:2px solid var(--sc,var(--alt));}
+  .sec .tag{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--sc,var(--alt));letter-spacing:.08em;}
+  .sec h2{font-family:var(--display);font-size:clamp(19px,3.4vw,25px);margin:4px 0 0;line-height:1.25;}
+  .step{margin:26px 0 0;}
+  .step h3{font-family:var(--display);font-size:17px;margin:0 0 4px;display:flex;align-items:baseline;gap:10px;}
+  .step h3 .n{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--sc,var(--alt));flex:0 0 auto;}
+  .step p{margin:8px 0;font-size:14.5px;}
+  .step ul{margin:8px 0;padding-left:20px;}
+  .step li{margin:4px 0;font-size:14px;}
+  .kbd{font-family:var(--mono);font-size:12px;background:#EEF1F7;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;white-space:nowrap;}
+  .mono{font-family:var(--mono);font-size:12.5px;background:#EEF1F7;padding:1px 6px;border-radius:5px;}
+
+  /* code blocks */
+  .cb{border-radius:11px;overflow:hidden;border:1px solid #1D2740;margin:12px 0;}
+  .cb-head{display:flex;align-items:center;justify-content:space-between;background:#141D33;padding:6px 12px;}
+  .cb-lang{font-family:var(--mono);font-size:11px;color:var(--code-dim);letter-spacing:.06em;}
+  .cb-copy{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:none;background:transparent;color:var(--code-dim);cursor:pointer;padding:2px 6px;border-radius:5px;transition:color .15s,background .15s;}
+  .cb-copy:hover{background:#212D4B;color:#fff;}
+  .cb-copy.done{color:#6FE0A6;}
+  .cb pre{margin:0;background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);font-size:12.5px;line-height:1.7;padding:13px 15px;overflow-x:auto;}
+  .cb pre .cm{color:#6E7F9E;}
+  .cb pre .k{color:#7FB2FF;}
+  .cb pre .s{color:#8BD5A0;}
+  .cb pre a{color:#8FC0FF;border-bottom:1px solid rgba(143,192,255,.45);}
+  .cb pre a:hover{border-bottom-color:#8FC0FF;color:#B6D6FF;}
+
+  /* reference links */
+  .links{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:40px 0 0;}
+  .links h2{font-family:var(--display);font-size:15px;margin:0 0 4px;}
+  .links p.sub{font-size:12.5px;color:var(--muted);margin:0 0 12px;}
+  .links ul{margin:0;padding-left:0;list-style:none;}
+  .links li{padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;display:flex;gap:12px;flex-wrap:wrap;align-items:baseline;}
+  .links li:first-of-type{border-top:none;}
+  .links .nm{font-weight:700;flex:0 0 auto;min-width:120px;}
+  .links .ds{color:var(--muted);flex:1;min-width:180px;}
+
+  /* gate / criteria */
+  .gate{border-left:4px solid var(--sc,var(--alt));background:color-mix(in srgb,var(--sc,var(--alt)) 6%,var(--panel));border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13.5px;}
+  .gate .lbl{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sc,var(--alt));display:block;margin-bottom:5px;}
+  .warn{border-left:4px solid #C0472B;background:color-mix(in srgb,#C0472B 6%,var(--panel));border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13.5px;}
+  .warn .lbl{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#C0472B;display:block;margin-bottom:5px;}
+
+  .tree{font-family:var(--mono);font-size:12px;line-height:1.75;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0;color:var(--ink);white-space:pre;overflow-x:auto;}
+
+  .foot{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);}
+  a{color:var(--primary);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--primary) 35%,transparent);}
+  a:hover{border-bottom-color:var(--primary);}
+  :focus-visible{outline:2.5px solid var(--primary);outline-offset:2px;border-radius:4px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+  @media (max-width:560px){.wrap{padding:40px 16px 70px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="doc-meta">PART 02 別紙 · 実施手順書 · Rev.1</p>
+  <h1>テクスチャ欠如下での<br>3次元姿勢計測 実施要領</h1>
+  <p class="lede"><a href="pose-measurement-system.html#p2">PART 02(追跡が困難な場合の代替案)</a> で示した「キーポイント抽出が困難な場合の代替戦略」を、実際に着手できる手順レベルまで展開した別紙です。校正 → ベースライン → 主軸(DANNCE)→ CGモデル活用 → 検証、の順に、コマンド・設定・合否基準を記します。</p>
+
+  <div class="ref">
+    <b>方針の要約</b> ── 主軸は <b>DANNCE/SDANNCE(ボリューメトリック回帰)</b>。anipose 三角測量は <b>ベースライン兼検証</b>。CGモデルは <b>①合成学習データ生成 ②形状事前分布としての補助/相互検証</b>。関節角の主計測はモデルバイアスを避け DANNCE 側に置く。<br>
+    <b>共通の注意</b> ── DANNCE/SDANNCE・aniposelib・PyTorch3D は更新が速い。以下のコマンド・パラメータ名は着手時点で各リポジトリの現行版を必ず確認すること。<span class="mono">SDANNCE は Linux のみ検証</span>。
+  </div>
+
+  <nav class="toc">
+    <h2>目次</h2>
+    <ol>
+      <li><span class="code">0</span><a href="#s0">環境構築とディレクトリ規約</a></li>
+      <li><span class="code">A-1</span><a href="#a1">撮影データと同期の規約</a></li>
+      <li><span class="code">A-2</span><a href="#a2">カメラ校正(anipose / aniposelib)</a></li>
+      <li><span class="code">A-3</span><a href="#a3">ベースライン:DLC/SLEAP + 三角測量</a></li>
+      <li><span class="code">A-4</span><a href="#a4">主軸:DANNCE / SDANNCE</a></li>
+      <li><span class="code">B-1</span><a href="#b1">CGモデルのリグ確認・整備</a></li>
+      <li><span class="code">B-2</span><a href="#b2">合成学習データ生成(bpy)</a></li>
+      <li><span class="code">B-3</span><a href="#b3">補助フィッティング(PyTorch3D)</a></li>
+      <li><span class="code">C</span><a href="#c">統合・検証プロトコル</a></li>
+      <li><span class="code">D</span><a href="#d">意思決定ゲート</a></li>
+    </ol>
+  </nav>
+
+  <!-- ================= 0 ================= -->
+  <div class="sec" id="s0" style="--sc:var(--alt)"><span class="tag">SECTION 0</span><h2>環境構築とディレクトリ規約</h2></div>
+
+  <div class="step">
+    <h3><span class="n">0-1</span>手法ごとに環境を分ける</h3>
+    <p>依存(CUDA・PyTorch・TensorFlow バージョン)が衝突するため、conda 環境を分離する。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 校正・三角測量ベースライン</span>
+conda create -n aniposelib python=3.9 -y
+<span class="cm"># DANNCE / SDANNCE（GPU必須・SDANNCEはLinux）</span>
+conda create -n dannce python=3.7 cudatoolkit=11.1 cudnn ffmpeg -c nvidia -y
+<span class="cm"># CGモデルのフィッティング（PyTorch3D）</span>
+conda create -n fit python=3.10 -y</code></pre></div>
+    <div class="gate" style="--sc:var(--alt)"><span class="lbl">合否基準</span>各環境で <span class="mono">nvidia-smi</span> と <span class="mono">python -c "import torch; print(torch.cuda.is_available())"</span> が True を返す(DANNCE/fit 環境)。</div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">0-2</span>プロジェクトのディレクトリ規約</h3>
+    <p>クラウド同期外(例 <span class="mono">~/Developer/frog-pose</span>)に置き、git 管理。データは大容量なので <span class="mono">.gitignore</span> と DVC/外部ストレージを併用。</p>
+    <div class="tree">frog-pose/
+├── calib/                 <span class="cm"># 校正動画・calibration.toml</span>
+├── raw/session_YYYYMMDD/  <span class="cm"># 同期済み本番動画（カメラ別）</span>
+├── anipose_project/       <span class="cm"># A-3 ベースライン</span>
+├── dannce_project/        <span class="cm"># A-4 主軸</span>
+├── synth/                 <span class="cm"># B-2 合成データ・bpyスクリプト</span>
+├── fit/                   <span class="cm"># B-3 フィッティング</span>
+└── validation/            <span class="cm"># C ワンド・手動デジタイズ</span></div>
+  </div>
+
+  <!-- ================= A-1 ================= -->
+  <div class="sec" id="a1" style="--sc:var(--a)"><span class="tag">SECTION A-1</span><h2>撮影データと同期の規約</h2></div>
+  <div class="step">
+    <p>3台をハードウェアトリガで同期(PART 01)。全手法が<b>フレーム完全同期</b>を前提とする。カメラ名は全工程で一貫させ、ファイル名に埋め込む(例 <span class="mono">..._cam1.mp4</span>)。DANNCE はカメラごとにサブフォルダを分け、動画名を<b>先頭フレーム番号</b>で命名する規約なので、撮影段階から命名を決めておく。</p>
+    <div class="warn"><span class="lbl">前提条件</span>同期が甘いと高速な跳躍で三角測量・ボリューム構成が破綻する。トリガの実配線とタイムスタンプ一致を、本番前に LED 点滅で全視野同時に確認しておく。</div>
+  </div>
+
+  <!-- ================= A-2 ================= -->
+  <div class="sec" id="a2" style="--sc:var(--a)"><span class="tag">SECTION A-2</span><h2>カメラ校正(anipose / aniposelib)</h2></div>
+
+  <div class="step">
+    <h3><span class="n">A-2-1</span>ChArUco ボードの準備</h3>
+    <p>ChArUco を推奨(検出が頑健)。跳躍ボリュームと同スケールで、全視野に大きく映る板を用意。マス目寸法・マーカ寸法・辞書を控えておく(校正パラメータに使用)。</p>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-2-2</span>aniposelib で校正(スクリプト方式)</h3>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code>conda activate aniposelib
+pip install aniposelib</code></pre></div>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">python</span><button class="cb-copy">COPY</button></div><pre><code><span class="k">from</span> aniposelib.boards <span class="k">import</span> CharucoBoard
+<span class="k">from</span> aniposelib.cameras <span class="k">import</span> Camera, CameraGroup
+
+<span class="cm"># 板の実測値に合わせる（squaresX/Y, 単位mm）</span>
+board = CharucoBoard(<span class="s">7</span>, <span class="s">10</span>,
+                     square_length=<span class="s">25</span>, marker_length=<span class="s">18.75</span>,
+                     marker_bits=<span class="s">4</span>, dict_size=<span class="s">50</span>)
+
+cam_names = [<span class="s">'cam1'</span>, <span class="s">'cam2'</span>, <span class="s">'cam3'</span>]
+cgroup = CameraGroup([Camera(name=n) for n <span class="k">in</span> cam_names])
+
+<span class="cm"># カメラごとの校正動画（list of lists）</span>
+vidnames = [[<span class="s">'calib/calib_cam1.mp4'</span>],
+            [<span class="s">'calib/calib_cam2.mp4'</span>],
+            [<span class="s">'calib/calib_cam3.mp4'</span>]]
+
+<span class="cm"># 反復バンドル調整で内部・外部を推定</span>
+cgroup.calibrate_videos(vidnames, board)
+cgroup.dump(<span class="s">'calib/calibration.toml'</span>)</code></pre></div>
+    <div class="gate" style="--sc:var(--a)"><span class="lbl">合否基準</span>平均再投影誤差が概ね 1px 未満。既知長ワンドで復元した点間距離の実長誤差(mm)を別途測り、記録として残す(検証 C で再使用)。誤差が大きい場合は誤検出フレームを除外して再校正。</div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-2-3</span>世界座標系を接地面・重力軸に合わせる</h3>
+    <p>離陸角・重心の放物線を意味づけるため、床面や既知の直交治具で座標軸を定義する(anipose の <span class="mono">[triangulation] axes / reference_point</span> 相当)。重力方向を1軸に取ると後段のキネマティクスが解釈しやすい。</p>
+  </div>
+
+  <!-- ================= A-3 ================= -->
+  <div class="sec" id="a3" style="--sc:var(--a)"><span class="tag">SECTION A-3</span><h2>ベースライン:DLC/SLEAP + 三角測量</h2></div>
+
+  <div class="step">
+    <h3><span class="n">A-3-1</span>2D 検出器の学習</h3>
+    <p>DeepLabCut または SLEAP でカエルのランドマーク(吻端・眼・肩・肘・手首・指端・股・膝・足首・指端・総排泄口・尾端など)をラベリングし学習。<b>ここがテクスチャ欠如で崩れる想定</b>なので、各部位の検出信頼度を後で診断できるよう記録する。</p>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-3-2</span>anipose プロジェクトと config.toml</h3>
+    <p>anipose は雛形を作らないので、config.toml を自分で用意する。骨長拘束(<span class="mono">constraints</span>)を入れると、テクスチャ欠如由来の外れを幾何拘束で多少緩和できる。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">config.toml（抜粋）</span><button class="cb-copy">COPY</button></div><pre><code>model_folder = <span class="s">'/path/to/DLC_project'</span>
+nesting = <span class="s">1</span>
+video_extension = <span class="s">'mp4'</span>
+
+[calibration]
+board_type = <span class="s">"charuco"</span>
+board_size = [<span class="s">7</span>, <span class="s">10</span>]
+board_marker_bits = <span class="s">4</span>
+board_marker_dict_number = <span class="s">50</span>
+board_marker_length = <span class="s">18.75</span>   <span class="cm"># mm</span>
+board_square_side_length = <span class="s">25</span>  <span class="cm"># mm</span>
+
+[triangulation]
+cam_regex = <span class="s">'_cam([0-9])'</span>
+ransac = true
+optim = true                <span class="cm"># 3Dフィルタ有効</span>
+constraints = [[<span class="s">"elbow"</span>,<span class="s">"wrist"</span>], [<span class="s">"knee"</span>,<span class="s">"ankle"</span>]]  <span class="cm"># 骨長</span>
+scale_smooth = <span class="s">2</span>            <span class="cm"># 時間平滑の強さ</span>
+scale_length = <span class="s">2</span>            <span class="cm"># 骨長拘束の強さ</span>
+reproj_error_threshold = <span class="s">3</span>
+score_threshold = <span class="s">0.6</span>
+
+[angles]
+knee = [<span class="s">"hip"</span>, <span class="s">"knee"</span>, <span class="s">"ankle"</span>]</code></pre></div>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code>conda activate aniposelib
+anipose calibrate            <span class="cm"># A-2 を config 方式で行う場合</span>
+anipose analyze             <span class="cm"># DLCで2D検出</span>
+anipose filter              <span class="cm"># 2Dフィルタ</span>
+anipose triangulate         <span class="cm"># 3D復元 → pose-3d/*.csv</span>
+anipose calibration-errors  <span class="cm"># 校正誤差の確認</span>
+anipose angles              <span class="cm"># 関節角の算出</span></code></pre></div>
+    <div class="gate" style="--sc:var(--a)"><span class="lbl">判定ゲート</span>復元された部位のうち、再投影誤差・信頼度が慢性的に低い部位を列挙する。<b>この診断が主軸を DANNCE へ切り替える根拠</b>になる(全身が不良 → A-4 主軸へ / 一部のみ不良 → その部位を B のアンカー/補完対象に)。</div>
+  </div>
+
+  <!-- ================= A-4 ================= -->
+  <div class="sec" id="a4" style="--sc:var(--a)"><span class="tag">SECTION A-4</span><h2>主軸:DANNCE / SDANNCE</h2></div>
+
+  <div class="step">
+    <h3><span class="n">A-4-1</span>導入</h3>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code>conda activate dannce
+<span class="cm"># 本家（TF/PyTorchハイブリッド, Label3Dをサブモジュール取得）</span>
+git clone --recursive <a href="https://github.com/spoonsso/dannce" target="_blank" rel="noopener">https://github.com/spoonsso/dannce</a>
+cd dannce
+conda install pytorch=1.9.0 torchvision=0.10.0 -c pytorch -y
+pip install -e .
+<span class="cm"># 骨格拘束つきが必要なら SDANNCE（Linux・INSTALL.md参照）</span>
+<span class="cm"># git clone <a href="https://github.com/tqxli/sdannce" target="_blank" rel="noopener">https://github.com/tqxli/sdannce</a></span></code></pre></div>
+    <p>ラベリング GUI <span class="mono">Label3D</span>(MATLAB)も取得。骨格は有向グラフとして定義する。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code>git clone --recurse-submodules <a href="https://github.com/diegoaldarondo/Label3D" target="_blank" rel="noopener">https://github.com/diegoaldarondo/Label3D.git</a></code></pre></div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-4-2</span>校正を DANNCE 形式へ変換</h3>
+    <p>DANNCE は <span class="mono">*dannce.mat</span> に、カメラパラメータ(K・歪み <span class="mono">RDistort/TDistort</span>・回転 <span class="mono">r</span>・並進 <span class="mono">t</span>)、フレーム同期構造、(学習時は)3Dラベルをまとめて格納する。A-2 の <span class="mono">calibration.toml</span> からこの形式へ変換するスクリプトを用意する(VS Code の AI に雛形を書かせるのが早い)。</p>
+    <div class="gate" style="--sc:var(--a)"><span class="lbl">合否基準</span>変換後のパラメータで既知点を再投影し、A-2 と同等の再投影誤差になること(座標系・単位・歪みモデルの取り違えがないことの確認)。</div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-4-3</span>ディレクトリ規約</h3>
+    <div class="tree">dannce_project/
+├── videos/
+│   ├── Camera1/0.mp4   <span class="cm"># 先頭フレーム番号で命名</span>
+│   ├── Camera2/0.mp4
+│   └── Camera3/0.mp4
+├── label3d_project_dannce.mat  <span class="cm"># 校正+同期(+3Dラベル)</span>
+└── configs/*.yaml              <span class="cm"># com/dannce 設定</span></div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-4-4</span>COM(重心)ネットワーク</h3>
+    <p>DANNCE は top-down 方式で、まず動物の重心を各視点で検出→三角測量して 3D COM を得る。COM を少数フレームでラベルし、COMfinder を学習・推論する。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code>com-train   configs/com_config.yaml
+com-predict configs/com_config.yaml</code></pre></div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-4-5</span>3Dキーポイントのラベリングと学習</h3>
+    <p>Label3D で同期フレームに多視点ラベルを付け、三角測量で 3D 化。<span class="mono">Label3D.exportDannce()</span> で DANNCE 形式へ書き出す。まず数百フレーム規模から。跳躍のように四肢が大きく動く場合は、伸展位・屈曲位・回転を幅広くサンプルする。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">dannce config.yaml（主要パラメータ・抜粋）</span><button class="cb-copy">COPY</button></div><pre><code>camnames: [Camera1, Camera2, Camera3]
+n_channels_out: 14        <span class="cm"># キーポイント数</span>
+vol_size: 120             <span class="cm"># mm。最大伸展を包含する立方体の一辺</span>
+nvox: 80                  <span class="cm"># voxel解像度（64/80…大きいほど精細・高メモリ）</span>
+batch_size: 1
+predict_mode: torch
+epochs: 100</code></pre></div>
+    <div class="warn"><span class="lbl">最重要トレードオフ</span><span class="mono">vol_size</span>(体積)を跳躍の最大伸展に合わせて大きく取る必要があるが、<span class="mono">nvox</span> を上げないと 1 voxel あたりの実寸が粗くなる。<span class="mono">vol_size / nvox / VRAM</span> の三すくみが本タスク最大の調整点。まず小さめ <span class="mono">nvox</span> で通し、精度を見て上げる。</div>
+  </div>
+
+  <div class="step">
+    <h3><span class="n">A-4-6</span>学習・推論</h3>
+    <p>ラベルが少ない段階では、ラット由来の学習済み重み(RAT7M)からの転移学習が有効。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">bash</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># スクラッチ学習</span>
+dannce-train   configs/dannce_config.yaml
+<span class="cm"># もしくは事前学習からのfinetune</span>
+dannce-train   configs/dannce_finetune.yaml --train-mode finetune --epochs 100
+<span class="cm"># 推論 → predict_results/save_data_AVG0.mat</span>
+dannce-predict configs/dannce_config.yaml</code></pre></div>
+    <div class="gate" style="--sc:var(--a)"><span class="lbl">合否基準</span>hold-out ラベルとの Euclidean 誤差(mm)を部位別に集計。ワンド由来の実長誤差、再投影誤差、誤差の空間分布(ボリューム内均一性)を報告。SDANNCE の骨格拘束を入れると四肢末端の一貫性が上がるかを比較。</div>
+  </div>
+
+  <!-- ================= B-1 ================= -->
+  <div class="sec" id="b1" style="--sc:var(--b)"><span class="tag">SECTION B-1</span><h2>CGモデルのリグ確認・整備</h2></div>
+  <div class="step">
+    <p>購入した CG モデルを Blender で開き、<b>アーマチュア(ボーン)とスキンウェイトの有無</b>を確認する。無い/不十分な場合は、対象種の解剖に沿ってボーンを追加し、四肢が可動になるようウェイトを設定する(Rigify か手動)。この段階で関節の回転軸・可動域を、後段(合成データの姿勢サンプリング/フィッティングの拘束)で使う形に決めておく。</p>
+    <div class="warn"><span class="lbl">確認事項</span>市販モデルは対象種の骨格ランドマークに較正されていない。関節角の<b>絶対値</b>を主計測にしない前提を崩さないこと(本手法は合成データ生成と相互検証が主用途)。</div>
+  </div>
+
+  <!-- ================= B-2 ================= -->
+  <div class="sec" id="b2" style="--sc:var(--b)"><span class="tag">SECTION B-2</span><h2>合成学習データ生成(bpy)</h2></div>
+  <div class="step">
+    <h3><span class="n">B-2-1</span>bpy スクリプトの構成</h3>
+    <p>Blender の Python API で、姿勢・照明・材質・背景をランダム化しつつ、実カメラと同じ内部/外部パラメータでレンダリングする。真値は自分が生成しているので、3D 関節座標を各視点へ投影して 2D/3D ラベルを自動出力できる。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">python（bpy・擬似コード）</span><button class="cb-copy">COPY</button></div><pre><code><span class="k">import</span> bpy, random, json
+
+<span class="k">for</span> i <span class="k">in</span> range(N):
+    set_joint_angles(sample_within_biological_limits())  <span class="cm"># B-1の可動域</span>
+    randomize_lighting()        <span class="cm"># HDRI・強度・色</span>
+    randomize_material()        <span class="cm"># テクスチャ依存を断つため見た目も多様化</span>
+    randomize_background()
+    <span class="k">for</span> cam <span class="k">in</span> [cam1, cam2, cam3]:   <span class="cm"># 実機のK・R・tを設定</span>
+        render(cam, f<span class="s">"synth/{cam.name}/{i:06d}.png"</span>)
+        kp2d = project(joint_positions_3d, cam)  <span class="cm"># 真値2D</span>
+        save_label(kp2d, joint_positions_3d)     <span class="cm"># DLC/DANNCE形式</span></code></pre></div>
+    <p>実写に寄せるため、センサノイズ・軽微な劣化を付与して sim-to-real ギャップを詰める。</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">B-2-2</span>学習への投入</h3>
+    <p>合成データで A-4(DANNCE)や A-3(DLC/SLEAP)を事前学習 → 少数の実ラベルで fine-tune。テクスチャの薄い対象ほど実写学習が難しいため、この底上げが効く。</p>
+    <div class="gate" style="--sc:var(--b)"><span class="lbl">合否基準</span>合成のみで学習したモデルが、<b>実写 hold-out</b> で一定の精度を出すこと。出なければ、レンダリングの見た目分布(照明・材質・背景)を実機に寄せて再生成。</div>
+  </div>
+
+  <!-- ================= B-3 ================= -->
+  <div class="sec" id="b3" style="--sc:var(--b)"><span class="tag">SECTION B-3</span><h2>補助フィッティング(PyTorch3D)</h2></div>
+  <div class="step">
+    <h3><span class="n">B-3-1</span>方針と参照実装</h3>
+    <p>解析による合成(analysis-by-synthesis)を、微分可能レンダリングで実装する。動物向けの参照として <span class="mono">SMALify</span>(pose+shape+camera を 2Dキーポイント+シルエットに合わせて最適化)が有用だが、<b>SMAL は四足哺乳類モデルでカエルには直接使えない</b>。SMALify は<b>方法論のテンプレート</b>として参照し、可動モデルは B-1 で整備したカエルメッシュ、または PyTorch3D 上で自前に構成する。</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">B-3-2</span>PyTorch3D の構成</h3>
+    <p>PyTorch3D の <span class="mono">SoftSilhouetteShader</span> でシルエットを微分可能にレンダリングし、観測マスクとの差を姿勢パラメータへ逆伝播する。カメラは 3 視点の校正済み <span class="mono">R, T, K</span> を PerspectiveCameras に設定。シルエット抽出は背景制御下の背景差分か <span class="mono">SAM</span> 等のセグメンテーション。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">python（構成の骨子）</span><button class="cb-copy">COPY</button></div><pre><code><span class="k">from</span> pytorch3d.renderer <span class="k">import</span> (
+    PerspectiveCameras, RasterizationSettings,
+    MeshRasterizer, MeshRenderer, SoftSilhouetteShader, BlendParams)
+
+blend = BlendParams(sigma=<span class="s">1e-4</span>, gamma=<span class="s">1e-4</span>)
+cams  = PerspectiveCameras(R=R3, T=T3, K=K3, device=dev)  <span class="cm"># 3視点</span>
+rend  = MeshRenderer(MeshRasterizer(cams, RasterizationSettings(...)),
+                     SoftSilhouetteShader(blend))
+
+<span class="k">def</span> loss(theta):                 <span class="cm"># theta=全体回転・並進+関節角</span>
+    mesh = pose_mesh(theta)       <span class="cm"># LBSで変形（B-1のリグ）</span>
+    sil  = rend(mesh)             <span class="cm"># 3視点シルエット</span>
+    L  = w1*silhouette_iou(sil, obs_masks)
+    L += w2*reproj(anchors, theta)   <span class="cm"># 吻端・眼・総排泄口</span>
+    L += w3*temporal_smooth(theta)   <span class="cm"># 関節角速度</span>
+    L += w4*joint_limit_prior(theta) <span class="cm"># 可動域</span>
+    L += w5*shape_scale_prior(theta)
+    <span class="k">return</span> L</code></pre></div>
+  </div>
+  <div class="step">
+    <h3><span class="n">B-3-3</span>最適化と初期化</h3>
+    <ul>
+      <li><b>最適化</b>:Adam で coarse-to-fine(まず全体の回転・並進・スケール → 次に四肢)。</li>
+      <li><b>初期化</b>:前フレーム+<b>A-4(DANNCE)の 3D キーポイント</b>で与え、局所解と左右対称の曖昧性を回避。3視点+陰影+アンカーが対称性を解消する。</li>
+      <li><b>出力</b>:関節角つき全身3D姿勢。ただし主計測は DANNCE 側に置き、これは相互検証/欠損部位の補完に用いる。</li>
+    </ul>
+    <div class="gate" style="--sc:var(--b)"><span class="lbl">合否基準</span>フィッティング解と DANNCE 3D の一致度(部位別の 3D 距離)。系統的な乖離があれば、それはモデル形態バイアスの兆候として methods に明記(主計測を DANNCE に置く根拠の裏づけになる)。</div>
+  </div>
+
+  <!-- ================= C ================= -->
+  <div class="sec" id="c" style="--sc:var(--c)"><span class="tag">SECTION C</span><h2>統合・検証プロトコル</h2></div>
+  <div class="step">
+    <p>手法に依らず、論文の妥当性を支える検証を用意する。</p>
+    <ul>
+      <li><b>既知長ワンド</b>:跳躍ボリューム内で動かし、復元点間距離の実長誤差(mm)と誤差の空間分布を報告。</li>
+      <li><b>手動デジタイズ比較</b>:一部フレーム・一部部位で熟練者の手動 3D デジタイズと比較(観察者間誤差も)。</li>
+      <li><b>重心の放物線を独立検証に使う</b>:空中フェーズの重心は放物線を描くはず。再構成重心に放物線を当て、残差で計測ノイズを bound する。</li>
+      <li><b>感度分析</b>:欠損・オクルージョン処理や平滑化パラメータを振り、結論がそれらに頑健であることを示す。</li>
+    </ul>
+    <div class="warn"><span class="lbl">循環論法の回避</span>重心の弾道は<b>検証専用</b>とし、再構成側に弾道拘束を課さない。anipose の時間平滑は平滑化事前分布であって弾道拘束ではないが、平滑化が残差を過小評価しうる点は methods に一言添える。</div>
+  </div>
+
+  <!-- ================= D ================= -->
+  <div class="sec" id="d" style="--sc:var(--alt)"><span class="tag">SECTION D</span><h2>意思決定ゲート</h2></div>
+  <div class="step">
+    <p>手戻りを避けるための分岐基準。</p>
+    <ul>
+      <li><b>G1(A-3後)</b>:2D検出が全身で慢性的に不安定 → 主軸を <b>A-4 DANNCE</b> に確定。一部部位のみ不安定 → その部位を B のアンカー/補完対象に指定。</li>
+      <li><b>G2(A-4後)</b>:DANNCE でも特定部位(四肢末端等)が残る → <b>SDANNCE の骨格拘束</b>を試す、それでも残れば <b>B-3 フィッティング</b>で補完。</li>
+      <li><b>G3(ラベル律速)</b>:学習データ不足が精度を律速 → <b>B-2 合成データ</b>で底上げしてから A-4/A-3 を再学習。</li>
+      <li><b>G4(検証)</b>:C の誤差が目標(要件定義の mm)を満たすまで、校正 → ボリューム/解像度 → ラベル量の順で改善を回す。</li>
+    </ul>
+  </div>
+
+  <div class="links">
+    <h2>参照リンク</h2>
+    <p class="sub">本別紙で参照した主要ツール・ドキュメント(着手時に現行版を確認)</p>
+    <ul>
+      <li><span class="nm"><a href="https://anipose.readthedocs.io" target="_blank" rel="noopener">anipose</a></span><span class="ds">多視点三角測量・校正(A-2, A-3)。ドキュメント</span></li>
+      <li><span class="nm"><a href="https://github.com/DeepLabCut/DeepLabCut" target="_blank" rel="noopener">DeepLabCut</a></span><span class="ds">2Dキーポイント検出(A-3)</span></li>
+      <li><span class="nm"><a href="https://sleap.ai" target="_blank" rel="noopener">SLEAP</a></span><span class="ds">2Dキーポイント検出の代替(A-3)</span></li>
+      <li><span class="nm"><a href="https://github.com/spoonsso/dannce" target="_blank" rel="noopener">DANNCE</a></span><span class="ds">ボリューメトリック3D回帰・主軸(A-4)</span></li>
+      <li><span class="nm"><a href="https://github.com/tqxli/sdannce" target="_blank" rel="noopener">SDANNCE</a></span><span class="ds">骨格拘束つき版(Linuxのみ検証)</span></li>
+      <li><span class="nm"><a href="https://github.com/diegoaldarondo/Label3D" target="_blank" rel="noopener">Label3D</a></span><span class="ds">多視点3DラベリングGUI(A-4-5)</span></li>
+      <li><span class="nm"><a href="https://www.blender.org" target="_blank" rel="noopener">Blender</a></span><span class="ds">CGモデル整備・合成データ生成(B-1, B-2)</span></li>
+      <li><span class="nm"><a href="https://github.com/facebookresearch/pytorch3d" target="_blank" rel="noopener">PyTorch3D</a></span><span class="ds">微分可能レンダリング・フィッティング(B-3)</span></li>
+      <li><span class="nm"><a href="https://github.com/benjiebob/SMALify" target="_blank" rel="noopener">SMALify</a></span><span class="ds">動物モデルフィッティングの方法論参照(B-3)</span></li>
+      <li><span class="nm"><a href="https://github.com/facebookresearch/segment-anything" target="_blank" rel="noopener">Segment Anything (SAM)</a></span><span class="ds">シルエット抽出(B-3-2)</span></li>
+      <li><span class="nm"><a href="https://code.visualstudio.com" target="_blank" rel="noopener">Visual Studio Code</a></span><span class="ds">開発環境・AI連携(本編)</span></li>
+    </ul>
+  </div>
+
+  <p class="foot">
+    本別紙は着手用の手順書です。コマンド・パラメータ名・リポジトリ構成は各ツールの版で変わり得るため、実装フェーズで現行版を確認しながら固めてください。対象種と、テクスチャ欠如が全身か一部かが確定すれば、A-3 の診断項目・B-2 の重点部位・B-3 のアンカー定義を種特異的に詰められます。より正式な体裁(図入りの手法ドキュメントや Word 計画書)への変換も可能です。
+  </p>
+
+</div>
+
+<script>
+  document.querySelectorAll('.cb-copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.closest('.cb').querySelector('pre');
+      var text = pre.innerText;
+      navigator.clipboard.writeText(text).then(function(){
+        var prev = btn.textContent;
+        btn.textContent = 'COPIED'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = prev; btn.classList.remove('done'); }, 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>

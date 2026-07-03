@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究資料集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EBEEF4;--panel:#FFFFFF;--ink:#131A2B;--muted:#5C6579;--line:#DCE1EA;
+    --primary:#3B3E9E;--pose:#12857A;--alt:#8E3B5E;--radius:16px;
+    --display:"Space Grotesk","Noto Sans JP",sans-serif;
+    --body:"Noto Sans JP",sans-serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 22px 90px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);margin:0 0 14px;font-weight:600;}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5.4vw,42px);line-height:1.2;margin:0 0 16px;letter-spacing:-.01em;}
+  .lede{color:var(--muted);font-size:16px;max-width:60ch;margin:0 0 46px;}
+
+  .cat{margin:0 0 40px;}
+  .cat-label{display:flex;align-items:baseline;gap:12px;margin:0 0 16px;}
+  .cat-label .jp{font-family:var(--display);font-size:19px;font-weight:700;}
+  .cat-label .en{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+  .cat-label .rule{flex:1;height:1px;background:var(--line);align-self:center;}
+
+  .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:14px;text-decoration:none;color:inherit;border-left:5px solid var(--accent);transition:transform .15s,box-shadow .15s;}
+  a.card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(19,26,43,.10);}
+  .card .no{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--accent);}
+  .card h2{font-family:var(--display);font-size:20px;margin:6px 0 8px;line-height:1.25;}
+  .card p{margin:0;font-size:14px;color:var(--muted);}
+  .card .go{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent);}
+
+  .card.soon{--accent:var(--line);border-left-color:#C7CEDA;background:#F4F6FA;cursor:default;}
+  .card.soon h2{color:var(--muted);}
+  .badge{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 9px;vertical-align:middle;margin-left:8px;}
+
+  .foot{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Research Documents</p>
+  <h1>研究資料集</h1>
+  <p class="lede">環境構築と個別研究タスクの資料をまとめています。各カテゴリには今後も資料を追加していきます。</p>
+
+  <!-- ===== 環境構築 ===== -->
+  <section class="cat">
+    <div class="cat-label"><span class="jp">環境構築</span><span class="en">Environment</span><span class="rule"></span></div>
+
+    <a class="card" href="setup-vscode-ai.html" style="--accent:var(--primary)">
+      <span class="no">SETUP</span>
+      <h2>VS Code 導入・AI連携</h2>
+      <p>VS Code のインストール(Mac / Windows)と、無料AI 3ツール(Copilot / Gemini / Cline)の連携。</p>
+      <span class="go">開く →</span>
+    </a>
+
+    <div class="card soon">
+      <span class="no">SETUP</span>
+      <h2>RStudio の導入<span class="badge">準備中</span></h2>
+      <p>統計・可視化環境の構築資料。近日追加予定。</p>
+    </div>
+  </section>
+
+  <!-- ===== 個別研究タスク ===== -->
+  <section class="cat">
+    <div class="cat-label"><span class="jp">個別研究タスク</span><span class="en">Research Tasks</span><span class="rule"></span></div>
+
+    <a class="card" href="pose-measurement-system.html" style="--accent:var(--pose)">
+      <span class="no">TASK</span>
+      <h2>カエル跳躍の3次元姿勢計測</h2>
+      <p>3カメラで跳躍時の空中3次元姿勢を計測するシステムの設計と、追跡が困難な場合の代替案。実施手順書(別紙)へのリンクを内包。</p>
+      <span class="go">開く →</span>
+    </a>
+
+    <div class="card soon">
+      <span class="no">TASK</span>
+      <h2>次のタスク<span class="badge">準備中</span></h2>
+      <p>並行して進む別の研究タスクをここに追加していきます。</p>
+    </div>
+  </section>
+
+  <p class="foot">静的サイト(GitHub Pages 等)としてそのまま公開できます。</p>
+</div>
+</body>
+</html>
