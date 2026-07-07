@@ -216,7 +216,7 @@
 
   <!-- ================= PART 2 : AI ================= -->
   <div class="part" id="p2" style="--paccent:var(--cline)"><span class="no">PART 02</span><h2>AI を連携する</h2><span class="rule"></span></div>
-  <p class="lede" style="margin-top:-8px">どれも拡張機能ビュー <span class="kbd">⇧⌘X</span> / <span class="kbd">Ctrl+Shift+X</span> から入ります。まず1つ選び、上限や使い勝手が合わなければ後から足す/切り替えでOK。</p>
+  <p class="lede" style="margin-top:-8px">どちらも拡張機能ビュー <span class="kbd">⇧⌘X</span> / <span class="kbd">Ctrl+Shift+X</span> から入ります。この2つは役割が違うので、<b>どちらか一方ではなく両方入れて使い分ける</b>のがおすすめです。<b>Copilot</b> はタイプ中のインライン補完(書く速度を上げる)、<b>Cline</b> はコードベースを読んで複数ファイル編集やコマンド実行まで任せるエージェント(作業を代行させる)。どちらも実質無料枠で運用できます。なお Copilot の利用には GitHub アカウントでのサインインが必要です(Cline は不要で、モデルの API キーだけで動きます)。</p>
 
   <article class="card tool spine" data-t="copilot">
     <div class="toolhead">
@@ -236,27 +236,9 @@
     </div>
   </article>
 
-  <article class="card tool spine" data-t="gemini">
-    <div class="toolhead">
-      <span class="idx">02</span>
-      <div class="tt"><span class="name">Gemini Code Assist</span><span class="tsub">無料枠が寛大・大きめのコンテキスト</span></div>
-      <span class="free-tag">無料 個人向けに広め</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li>拡張機能ビューで <b>「Gemini Code Assist」</b> を検索してインストール。
-          <span class="chip"><code>ext install Google.geminicodeassist</code><button data-copy="ext install Google.geminicodeassist">COPY</button></span></li>
-        <li>サイドバーの <b>Gemini アイコン</b> →「Sign in / Get started」。</li>
-        <li><b>Google アカウントでサインイン</b>(個人利用は無料)し、無料利用に同意。</li>
-        <li>補完・チャットが有効になったことを確認。</li>
-      </ol>
-      <div class="note"><b>注意</b> ── チャットで大きめのコンテキスト(約128kトークン)を扱えるので、補完を大量に使う場合に上限で困りにくい。</div>
-    </div>
-  </article>
-
   <article class="card tool spine" data-t="cline">
     <div class="toolhead">
-      <span class="idx">03</span>
+      <span class="idx">02</span>
       <div class="tt"><span class="name">Cline</span><span class="tsub">Claude Code に近い自律エージェント・BYOK</span></div>
       <span class="free-tag">拡張は無料 / モデルは別</span>
     </div>
@@ -264,15 +246,61 @@
       <ol class="steps">
         <li>拡張機能ビューで <b>「Cline」</b> を検索してインストール。
           <span class="chip"><code>ext install saoudrizwan.claude-dev</code><button data-copy="ext install saoudrizwan.claude-dev">COPY</button></span></li>
-        <li>サイドバーの <b>Cline アイコン</b> を開く。</li>
-        <li>モデルプロバイダを設定。実質無料なら:
-          <p class="chip-label">A) Google AI Studio の無料 Gemini API キーを貼る / B) ローカルの Ollama を繋ぐ(完全ローカル)</p>
+        <li>サイドバーの <b>Cline アイコン</b> を開く。実質無料で使うなら、次の <b>A(おすすめ)</b> か <b>B</b> でモデルを設定する。</li>
+        <li><b>A) Google の無料 Gemini API キーを使う</b>
+          <p class="chip-label"><b>① キーを取得</b>:<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> を開き Google アカウントでサインイン → <b>「Create API key」</b> → プロジェクトを選択/作成 → 生成されたキー(<span class="mono">AIza…</span> で始まる)をコピー。<b>表示は一度きり</b>なので確実に控える。</p>
+          <p class="chip-label"><b>② Cline に貼る</b>:Cline パネル右上の <b>設定(⚙️)</b> を開き、<b>「API Provider」</b> ドロップダウンで <b>「Google Gemini」</b> を選択 → 現れる <b>「Gemini API Key」</b> 欄に①のキーを貼り付け。</p>
+          <p class="chip-label"><b>③ モデルを選ぶ</b>:<b>「Model」</b> ドロップダウンで <span class="mono">gemini-2.5-pro</span>(高性能)や <span class="mono">gemini-2.5-flash</span>(高速・軽量)などを選んで保存。</p>
+        </li>
+        <li><b>B) ローカルの Ollama を使う(完全ローカル・課金なし)</b>
+          <p class="chip-label">Ollama でモデルを起動し、API Provider で <b>「Ollama」</b> を選んでローカルモデルを指定する。</p>
           <span class="chip"><code>ollama run qwen2.5-coder</code><button data-copy="ollama run qwen2.5-coder">COPY</button></span></li>
-        <li>キーまたは接続先を保存し、タスクを日本語で入力。ファイル編集・コマンド実行は <b>毎回承認制</b>。</li>
+        <li>設定を保存し、タスクを日本語で入力。ファイル編集・コマンド実行は <b>毎回承認制</b>。</li>
       </ol>
-      <div class="note"><b>注意</b> ── 拡張は無料、API 利用料は別。無料枠やローカルモデルなら実質ゼロ円。次章の解析コードを任せるならこの系統が向く。</div>
+      <div class="note"><b>注意</b> ── 拡張機能は無料。Gemini の無料 API 枠(レート制限あり)やローカルモデルなら実質ゼロ円で使える。API キーは他人に見せず、リポジトリ等に貼らないこと。</div>
     </div>
   </article>
+
+  <div class="card spine" style="--accent:var(--primary)">
+    <div class="card-body">
+      <h3>使い分けと切り替え</h3>
+      <p class="sub">2つは同時に動く。排他ではなく共存</p>
+      <p>Copilot は<b>エディタの中</b>で動き(タイプすると薄いゴーストテキストで続きが出る)、Cline は<b>左の専用パネル</b>で動きます。互いに干渉しないので、「切り替え」というより<b>今どちらの手を使うかを選ぶ</b>だけです。</p>
+      <ol class="steps">
+        <li><b>Copilot を使う</b> ── ファイルを普通に編集し、出てきた候補を <span class="kbd">Tab</span> で確定。質問は Copilot Chat(チャットビュー)から。常時オンの背景アシスト。</li>
+        <li><b>Cline を使う</b> ── 左のアクティビティバーの <b>Cline アイコン</b> を開き、やりたいことを日本語で書いて実行。ファイル編集・コマンドは承認制。</li>
+        <li><b>補完が邪魔なとき</b> ── Cline に集中したいときは、ステータスバーの <b>Copilot アイコン</b> →「Disable / Snooze completions」で補完を一時停止(ファイル種別ごと・全体を選べる)。</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="card spine" style="--accent:var(--copilot)">
+      <div class="card-body">
+        <h3>Copilot が向く場面</h3>
+        <ul>
+          <li>自分で書きながら、続きをサッと補完したい</li>
+          <li>定型文・ボイラープレート・1関数の中身</li>
+          <li>タイピングの流れを止めたくない</li>
+          <li>選択範囲へのちょっとした質問・説明</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card spine" style="--accent:var(--cline)">
+      <div class="card-body">
+        <h3>Cline が向く場面</h3>
+        <ul>
+          <li>複数ファイルにまたがる作業・リファクタ</li>
+          <li>新規スクリプトやモジュールの雛形作成</li>
+          <li>コードベース全体を踏まえた修正</li>
+          <li>コマンド実行・環境設定・パイプライン構築</li>
+          <li>「これをやっておいて」と丸ごと任せたい</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="--accent:var(--primary)"><b>判断の目安</b> ── 「<b>自分で書く隣に Copilot、まるごと任せるなら Cline</b>」。無料枠の面でも、常時の補完は Copilot(月2,000補完/50チャット)、重いタスクは Cline(Gemini 無料 API のレート制限内)と分けると上限に当たりにくい。迷ったら、書き始めは Copilot、詰まって「全体を任せたい」と思ったら Cline に渡す、で回せます。</div>
 
     <p class="foot">
     環境構築の資料はこの後も追加していきます(RStudio の導入などを予定)。他の資料へは <a href="index.html">資料一覧</a> から移動できます。
