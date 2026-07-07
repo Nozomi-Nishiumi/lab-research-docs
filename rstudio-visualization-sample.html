@@ -51,7 +51,7 @@
   .note{margin-top:16px;background:color-mix(in srgb,var(--r) 7%,var(--panel));border:1px solid color-mix(in srgb,var(--r) 26%,var(--line));border-radius:10px;padding:12px 15px;font-size:13.5px;}
   .note b{color:var(--r);}
 
-  /* code blocks */
+  /* code blocks (input) */
   .cb{border-radius:11px;overflow:hidden;border:1px solid #1D2740;margin:12px 0 0;}
   .cb-head{display:flex;align-items:center;justify-content:space-between;background:#141D33;padding:6px 12px;}
   .cb-lang{font-family:var(--mono);font-size:11px;color:var(--code-dim);letter-spacing:.06em;}
@@ -63,38 +63,30 @@
   .cb pre .fn{color:#7FB2FF;}
   .cb pre .s{color:#8BD5A0;}
 
+  /* output blocks (actual results) */
+  .ob{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:12px 0 0;background:#fff;}
+  .ob-head{display:flex;align-items:center;gap:8px;background:#F2F5FA;border-bottom:1px solid var(--line);padding:6px 12px;}
+  .ob-lang{font-family:var(--mono);font-size:11px;color:#5C6579;letter-spacing:.06em;font-weight:600;}
+  .ob-dot{width:8px;height:8px;border-radius:50%;background:var(--vc,var(--r));flex:0 0 8px;}
+  .ob img{display:block;width:100%;height:auto;}
+  .ob pre{margin:0;background:#FBFCFE;color:#2A3550;font-family:var(--mono);font-size:12px;line-height:1.65;padding:13px 15px;overflow-x:auto;}
+  .ob pre .em{color:var(--alt);font-weight:600;}
+  .ob pre .warn{color:#B4442B;}
+
   /* viz block */
   .viz{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;border-left:5px solid var(--vc,var(--r));}
-  .viz-head{display:flex;align-items:center;gap:16px;}
-  .viz .thumb{flex:0 0 120px;height:72px;background:#F5F8FC;border:1px solid var(--line);border-radius:8px;}
-  .viz .thumb svg{display:block;width:100%;height:100%;}
+  .viz-head{display:flex;align-items:center;gap:14px;}
+  .viz .vno{font-family:var(--mono);font-weight:600;font-size:14px;color:#fff;background:var(--vc,var(--r));width:34px;height:34px;flex:0 0 34px;border-radius:9px;display:flex;align-items:center;justify-content:center;}
   .viz h3{font-family:var(--display);font-size:17px;margin:0 0 3px;}
   .viz p{margin:0;font-size:13.5px;color:var(--muted);}
-  @media(max-width:520px){.viz-head{flex-wrap:wrap;}.viz .thumb{flex:0 0 100%;}}
+  .viz .note{font-size:13px;}
+  .viz .note b{color:var(--vc,var(--r));}
+  .viz .note{background:color-mix(in srgb,var(--vc,var(--r)) 6%,var(--panel));border-color:color-mix(in srgb,var(--vc,var(--r)) 24%,var(--line));}
 
-  /* tool cards (AI連携) */
-  .toolhead{display:flex;align-items:center;gap:16px;padding:22px 26px 4px;}
-  .idx{font-family:var(--mono);font-weight:600;font-size:15px;color:#fff;background:var(--accent);width:38px;height:38px;flex:0 0 38px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
-  .toolhead .tt{flex:1;}
-  .toolhead .name{display:block;font-family:var(--display);font-weight:700;font-size:20px;line-height:1.25;}
-  .toolhead .tsub{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;}
-  .free-tag{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:3px 11px;white-space:nowrap;background:color-mix(in srgb,var(--accent) 8%,transparent);}
-  .tool[data-t="copilot"]{--accent:#7A5CF0;}
-  .tool[data-t="posit"]{--accent:#1E6FD0;}
-  .tool.spine{border-left-color:var(--accent);}
-  .tool .card-body ol.steps>li::before{color:var(--accent);}
-  @media (max-width:560px){.toolhead{flex-wrap:wrap;}.free-tag{order:3;margin-left:54px;}}
-  /* big appendix reference */
-  .bigref{display:block;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--r);border-radius:14px;padding:20px 24px;margin:26px 0;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;}
-  a.bigref:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(19,26,43,.10);border-color:var(--line);border-left-color:var(--r);}
-  .bigref .no{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--r);}
-  .bigref h3{font-family:var(--display);font-size:19px;margin:6px 0 6px;color:var(--ink);}
-  .bigref p{margin:0;font-size:14px;color:var(--muted);}
-  .bigref .go{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--r);}
-    .foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);}
+  .foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);}
   a{color:var(--primary);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--primary) 35%,transparent);}
   a:hover{border-bottom-color:var(--primary);}
-  .toc a,.cb a{border-bottom:none;}
+  .toc a{border-bottom:none;}
   :focus-visible{outline:2.5px solid var(--r);outline-offset:2px;border-radius:4px;}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
   @media (max-width:560px){.wrap{padding:40px 16px 70px;}}
@@ -105,7 +97,7 @@
 
   <p class="eyebrow">別紙 · 可視化サンプル</p>
   <h1>データを可視化する<br>サンプルコード</h1>
-  <p class="lede"><a href="rstudio-setup.html">RStudio 導入</a>の別紙です。base R 同梱の <span class="mono">airquality</span>(1973年NYの大気観測)を使い、ggplot2 でヒストグラム・棒・折れ線・散布図・回帰線を描きます。新規スクリプト(<span class="kbd">⇧⌘N</span> / <span class="kbd">Ctrl+Shift+N</span>)に貼り、各行で <span class="kbd">⌘⏎</span> / <span class="kbd">Ctrl+Enter</span> を押すと右下の <b>Plots</b> ペインに図が出ます。まず下準備を実行してから各図を試してください。</p>
+  <p class="lede"><a href="rstudio-setup.html">RStudio 導入</a>の別紙です。base R 同梱の <span class="mono">airquality</span>(1973年NYの大気観測)を使い、ggplot2 でヒストグラム・棒・折れ線・散布図・回帰線を描きます。新規スクリプト(<span class="kbd">⇧⌘N</span> / <span class="kbd">Ctrl+Shift+N</span>)に貼り、各行で <span class="kbd">⌘⏎</span> / <span class="kbd">Ctrl+Enter</span> を押すと右下の <b>Plots</b> ペインに図が出ます。各コードの下には<b>実際に実行したときの出力</b>(図・コンソール)を載せているので、手元の結果と見比べてください。まず下準備を実行してから各図を試します。</p>
 
   <nav class="toc">
     <a href="rstudio-setup.html">← RStudio 導入に戻る</a>
@@ -115,78 +107,119 @@
   <div class="card spine">
     <div class="card-body">
       <h3>下準備:パッケージ読み込みとデータ</h3>
-      <p class="sub">airquality に日付列を足しておく(折れ線グラフ用)</p>
-      <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>library(ggplot2)
+      <p class="sub">airquality に日付列を足しておく(折れ線グラフ用)。最後の <span class="mono">head(aq)</span> で中身を確認</p>
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code>library(ggplot2)
 library(dplyr)
 
 <span class="cm"># airquality：1973年NYの大気観測（base R 同梱）</span>
 data(airquality)
 aq &lt;- airquality %&gt;%
-  mutate(Date = as.Date(paste(<span class="s">1973</span>, Month, Day, sep = <span class="s">"-"</span>)))</code></pre></div>
+  mutate(Date = as.Date(paste(<span class="s">1973</span>, Month, Day, sep = <span class="s">"-"</span>)))
+
+head(aq)  <span class="cm"># 先頭6行を確認</span></code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Console</span></div><pre>  Ozone Solar.R Wind Temp Month Day       Date
+1    41     190  7.4   67     5   1 1973-05-01
+2    36     118  8.0   72     5   2 1973-05-02
+3    12     149 12.6   74     5   3 1973-05-03
+4    18     313 11.5   62     5   4 1973-05-04
+5    NA      NA 14.3   56     5   5 1973-05-05
+6    28      NA 14.9   66     5   6 1973-05-06</pre></div>
+      <div class="note"><b>読み方</b> ── 1行が1日分の観測。<span class="mono">NA</span> は欠測値(測れなかった日)で、このデータには Ozone を中心に多く含まれます。後の図でこの NA がどう扱われるかにも注目してください。</div>
     </div>
   </div>
 
   <!-- 1 histogram -->
   <div class="viz" style="--vc:#1E6FD0">
     <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><g fill="#1E6FD0"><rect x="10" y="42" width="14" height="24"/><rect x="26" y="30" width="14" height="36"/><rect x="42" y="18" width="14" height="48"/><rect x="58" y="26" width="14" height="40"/><rect x="74" y="40" width="14" height="26"/><rect x="90" y="50" width="14" height="16"/></g></svg></div>
+      <span class="vno">01</span>
       <div><h3>1. ヒストグラム</h3><p>1変数の分布。ここでは気温 <span class="mono">Temp</span> の頻度。</p></div>
     </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp)) +
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp)) +
   geom_histogram(binwidth = <span class="s">3</span>, fill = <span class="s">"#1E6FD0"</span>, color = <span class="s">"white"</span>) +
   labs(title = <span class="s">"気温の分布"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"日数"</span>)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/viz-1-histogram.png" alt="気温のヒストグラム。80°F付近が最頻で左に裾を引く分布" width="1120" height="704" loading="lazy"></div>
+    <div class="note"><b>読み方</b> ── 80°F(約27°C)付近の日が最も多く、左(低温側)に裾を引く分布。<span class="mono">binwidth</span> を変えると棒の幅(=階級幅)が変わるので、3 を 5 や 1 にして再実行してみてください。</div>
   </div>
 
   <!-- 2 bar -->
   <div class="viz" style="--vc:#12857A">
     <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><g fill="#12857A"><rect x="16" y="34" width="16" height="32"/><rect x="42" y="20" width="16" height="46"/><rect x="68" y="44" width="16" height="22"/><rect x="94" y="28" width="16" height="38"/></g></svg></div>
+      <span class="vno">02</span>
       <div><h3>2. 棒グラフ</h3><p>カテゴリ別の集計値。月別の平均オゾン濃度。</p></div>
     </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>aq %&gt;%
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code>aq %&gt;%
   group_by(Month) %&gt;%
   summarise(Ozone_mean = mean(Ozone, na.rm = <span class="s">TRUE</span>)) %&gt;%
   ggplot(aes(x = factor(Month), y = Ozone_mean)) +
   geom_col(fill = <span class="s">"#12857A"</span>) +
   labs(title = <span class="s">"月別の平均オゾン濃度"</span>, x = <span class="s">"月"</span>, y = <span class="s">"平均オゾン (ppb)"</span>)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/viz-2-bar.png" alt="月別平均オゾンの棒グラフ。7月・8月が約60ppbで高い" width="1120" height="704" loading="lazy"></div>
+    <div class="note"><b>読み方</b> ── 真夏(7・8月)の平均オゾンが約60ppbと突出し、5月の2倍以上。<span class="mono">na.rm = TRUE</span> は「NA を除いて平均する」指定で、これを外すと NA を含む月の平均が <span class="mono">NA</span> になってしまいます。</div>
   </div>
 
   <!-- 3 line -->
   <div class="viz" style="--vc:#E07B34">
     <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><polyline points="10,50 28,40 46,52 64,26 82,34 104,16" fill="none" stroke="#E07B34" stroke-width="2.5"/></svg></div>
+      <span class="vno">03</span>
       <div><h3>3. 折れ線グラフ</h3><p>時系列などの連続的な推移。日付ごとの気温。</p></div>
     </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Date, y = Temp)) +
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Date, y = Temp)) +
   geom_line(color = <span class="s">"#E07B34"</span>) +
   labs(title = <span class="s">"気温の推移"</span>, x = <span class="s">"日付"</span>, y = <span class="s">"気温 (°F)"</span>)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/viz-3-line.png" alt="5月から9月の日別気温の折れ線グラフ。夏に向けて上昇し8月末にピーク" width="1120" height="704" loading="lazy"></div>
+    <div class="note"><b>読み方</b> ── 5月から夏に向けて上昇し、8月末に97°Fのピーク。下準備で作った <span class="mono">Date</span> 列(Date型)を x に使っているので、軸が「May, Jun, …」と月表示になります。Month と Day のままでは連続した時間軸になりません。</div>
   </div>
 
   <!-- 4 scatter -->
   <div class="viz" style="--vc:#3B3E9E">
     <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><g fill="#3B3E9E"><circle cx="20" cy="52" r="3.2"/><circle cx="34" cy="46" r="3.2"/><circle cx="46" cy="50" r="3.2"/><circle cx="58" cy="36" r="3.2"/><circle cx="70" cy="40" r="3.2"/><circle cx="82" cy="26" r="3.2"/><circle cx="96" cy="30" r="3.2"/><circle cx="104" cy="20" r="3.2"/></g></svg></div>
+      <span class="vno">04</span>
       <div><h3>4. 散布図</h3><p>2変数の関係。気温とオゾン濃度。</p></div>
     </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp, y = Ozone)) +
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp, y = Ozone)) +
   geom_point(color = <span class="s">"#3B3E9E"</span>, alpha = <span class="s">0.7</span>) +
   labs(title = <span class="s">"気温とオゾンの関係"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/viz-4-scatter.png" alt="気温とオゾンの散布図。気温が高いほどオゾンが高い正の関係" width="1120" height="704" loading="lazy"></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Console(警告)</span></div><pre><span class="warn">Warning message:
+Removed 37 rows containing missing values or values outside the scale
+range (`geom_point()`).</span></pre></div>
+    <div class="note"><b>この警告は正常</b> ── Ozone が NA の37日分は点が描けないため自動で除外された、という通知でエラーではありません。図はそのまま使えます。気温が高いほどオゾンも高い「正の関係」が見えます(<span class="mono">alpha = 0.7</span> は点の透過で、重なりを見やすくする指定)。</div>
   </div>
 
   <!-- 5 scatter + regression -->
   <div class="viz" style="--vc:#8E3B5E">
     <div class="viz-head">
-      <div class="thumb"><svg viewBox="0 0 120 72"><line x1="12" y1="54" x2="108" y2="20" stroke="#8E3B5E" stroke-width="2.5"/><g fill="#3B3E9E"><circle cx="22" cy="50" r="3"/><circle cx="38" cy="48" r="3"/><circle cx="52" cy="40" r="3"/><circle cx="66" cy="38" r="3"/><circle cx="80" cy="28" r="3"/><circle cx="96" cy="26" r="3"/></g></svg></div>
+      <span class="vno">05</span>
       <div><h3>5. 散布図 + 回帰直線</h3><p>関係に直線をあてる。<span class="mono">geom_smooth(method="lm")</span>。</p></div>
     </div>
-    <div class="cb"><div class="cb-head"><span class="cb-lang">R</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp, y = Ozone)) +
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code>ggplot(aq, aes(x = Temp, y = Ozone)) +
   geom_point(alpha = <span class="s">0.6</span>) +
   geom_smooth(method = <span class="s">"lm"</span>, se = <span class="s">TRUE</span>, color = <span class="s">"#8E3B5E"</span>) +
-  labs(title = <span class="s">"回帰：オゾン ~ 気温"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)
-
-<span class="cm"># 回帰係数・決定係数の確認</span>
+  labs(title = <span class="s">"回帰：オゾン ~ 気温"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/viz-5-regression.png" alt="散布図に回帰直線と95%信頼区間の帯を重ねた図" width="1120" height="704" loading="lazy"></div>
+    <div class="note" style="margin-top:12px"><b>読み方</b> ── 直線が回帰直線、グレーの帯が95%信頼区間(<span class="mono">se = TRUE</span>)。続けて数値でも確認します。</div>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 回帰係数・決定係数の確認</span>
 model &lt;- lm(Ozone ~ Temp, data = aq)
 summary(model)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Console</span></div><pre>Call:
+lm(formula = Ozone ~ Temp, data = aq)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-40.729 -17.409  -0.587  11.306 118.271
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -146.9955    18.2872  -8.038 9.37e-13 ***
+<span class="em">Temp           2.4287     0.2331  10.418  &lt; 2e-16 ***</span>
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 23.71 on 114 degrees of freedom
+  (37 observations deleted due to missingness)
+<span class="em">Multiple R-squared:  0.4877</span>,	Adjusted R-squared:  0.4832
+F-statistic: 108.5 on 1 and 114 DF,  p-value: &lt; 2.2e-16</pre></div>
+    <div class="note"><b>結果の読み方</b> ── <b>Temp の係数 2.43</b>:気温が1°F上がるとオゾンが平均約2.4ppb増える。<b>Pr(&gt;|t|) &lt; 2e-16</b>:この関係が偶然である可能性はほぼゼロ(統計的に有意)。<b>R² = 0.49</b>:オゾンの変動の約49%が気温だけで説明できる。<span class="mono">(37 observations deleted due to missingness)</span> は散布図と同じく NA の37日分が除かれたことを示します。</div>
   </div>
 
   <div class="card spine">
@@ -231,6 +264,7 @@ ggplot(aq, aes(Temp, Ozone)) +
   labs(title = <span class="s">"回帰：オゾン ~ 気温"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)
 
 summary(lm(Ozone ~ Temp, data = aq))</code></pre></div>
+      <div class="note"><b>実行環境</b> ── このページの出力は R 4.4.1 + ggplot2 で実際に実行して得たものです。バージョンが違っても図の見た目(フォント・配色の細部)以外は同じ結果になります。</div>
     </div>
   </div>
 

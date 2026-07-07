@@ -47,6 +47,7 @@
   ol.steps b{font-weight:700;}
   .kbd{font-family:var(--mono);font-size:12px;background:#EEF1F7;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;white-space:nowrap;}
   .mono{font-family:var(--mono);font-size:12.5px;background:#EEF1F7;padding:1px 6px;border-radius:5px;}
+  .chip-label{font-size:12px;color:var(--muted);margin:10px 0 0;}
 
   .note{margin-top:16px;background:color-mix(in srgb,var(--r) 7%,var(--panel));border:1px solid color-mix(in srgb,var(--r) 26%,var(--line));border-radius:10px;padding:12px 15px;font-size:13.5px;}
   .note b{color:var(--r);}
@@ -162,6 +163,19 @@
     </div>
   </div>
 
+  <div class="card">
+    <div class="card-body">
+      <h3>共通の初期設定</h3>
+      <p class="sub">研究用途ならこの3つは最初に</p>
+      <ol class="steps">
+        <li><b>ワークスペースを毎回クリーンに</b> ── <b>Tools → Global Options → General</b> で「Save workspace to .RData on exit」を <b>Never</b> に、「Restore .RData into workspace at startup」の<b>チェックを外す</b>。前回の変数が勝手に残らなくなり、スクリプトだけで結果を再現できるようになります(再現性の基本設定)。</li>
+        <li><b>解析はプロジェクト単位で</b> ── <b>File → New Project…</b> でプロジェクトを作り、データ・スクリプトをその中に置く。作業ディレクトリが自動で切り替わり、パスのトラブルが減ります。</li>
+        <li><b>見た目の調整(任意)</b> ── <b>Tools → Global Options → Appearance</b> でエディタテーマとフォントサイズを変更できます。</li>
+      </ol>
+      <div class="note"><b>ヒント</b> ── プロジェクトは <span class="kbd">~/Developer</span> のようなクラウド同期外のフォルダに置くと、解析の中間ファイルの同期衝突を避けられます(VS Code 資料と同じ方針)。</div>
+    </div>
+  </div>
+
   <!-- ===== PART 3 ===== -->
   <div class="part" id="p3"><span class="no">PART 03</span><h2>パッケージと動作確認</h2><span class="rule"></span></div>
   <div class="card spine">
@@ -179,7 +193,7 @@ ggplot(mpg, aes(displ, hwy)) + geom_point()</code></pre></div>
 
   <!-- ===== PART 4 : AI ===== -->
   <div class="part" id="p4"><span class="no">PART 04</span><h2>AI を連携する</h2><span class="rule"></span></div>
-  <p class="lede" style="margin-top:-8px">RStudio には2系統の AI 連携があります。補完中心の GitHub Copilot と、データを見て動くエージェント Posit Assistant です。</p>
+  <p class="lede" style="margin-top:-8px">RStudio には2系統の AI 連携があります。この2つは役割が違うので、<b>どちらか一方ではなく両方設定して使い分ける</b>のがおすすめです(VS Code 資料の Copilot / Cline と同じ関係)。<b>GitHub Copilot</b> はタイプ中のインライン補完(書く速度を上げる)、<b>Posit Assistant</b> は R セッション・データ・プロットを見て動くエージェント(作業を代行させる)。Copilot は GitHub アカウントでのサインインが必要、Posit Assistant はモデルの API キーがあれば動きます。</p>
 
   <article class="card tool spine" data-t="copilot">
     <div class="toolhead">
@@ -189,12 +203,14 @@ ggplot(mpg, aes(displ, hwy)) + geom_point()</code></pre></div>
     </div>
     <div class="card-body">
       <ol class="steps">
-        <li><b>Tools → Global Options → Assistant</b> を開き、「Use code assistant」で <b>GitHub Copilot</b> を選ぶ。</li>
-        <li>案内に従って <b>Copilot Agent</b> のコンポーネントをインストール。</li>
-        <li><b>Sign In</b> を押し、表示された verification code を <span class="mono">github.com/login/device</span> に貼って <b>Authorize</b>。</li>
-        <li>ダイアログを閉じ、<span class="mono">.R</span> を開いてコードを書くと補完が出る。</li>
+        <li>RStudio が <b>2023.09.0 以降</b>か確認(<b>Help → Check for Updates</b>)。古い場合は更新する。</li>
+        <li><b>Tools → Global Options → Assistant</b>(版により <b>Copilot</b>)を開き、「Use code assistant」で <b>GitHub Copilot</b> を選ぶ。</li>
+        <li>案内に従って <b>Copilot Agent</b> のコンポーネントをインストール(初回のみ。数十秒)。</li>
+        <li><b>Sign In</b> を押すとダイアログに <b>verification code</b>(8桁)が出る。ブラウザで <span class="mono">github.com/login/device</span> を開き、コードを貼って <b>Authorize GitHub Copilot Plugin</b>。</li>
+        <li>ダイアログに「Copilot: Ready」等のステータスが出たら閉じる。GitHub 側でサブスクが有効でないと <b>Sign In 後にエラー</b>になるので、その場合は次の note を確認。</li>
+        <li><span class="mono">.R</span> ファイルを開いてコードを書き始めると、続きが<b>薄いゴーストテキスト</b>で提案される。<span class="kbd">Tab</span> で確定、無視してタイプを続ければ消える。コメントで <span class="mono"># 気温のヒストグラムを描く</span> と書いて改行すると、コードを丸ごと提案してくることも確認してみる。</li>
       </ol>
-      <div class="note"><b>要件</b> ── GitHub アカウントと Copilot サブスク(Individuals / Business)。<b>学生・教員は GitHub Education で無料</b>。RStudio Desktop 2023.09.0 以降が必要。詳細は <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html" target="_blank" rel="noopener">RStudio の Copilot ドキュメント</a>。</div>
+      <div class="note"><b>要件と無料枠</b> ── GitHub アカウントと Copilot のサブスク(Pro / Business)が必要。<b>学生・教員は <a href="https://github.com/education" target="_blank" rel="noopener">GitHub Education</a> の申請で Pro が無料</b>(学生証か大学メールで認証、承認まで数日)。まず Education を申請してから設定するのが定石。詳細は <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html" target="_blank" rel="noopener">RStudio の Copilot ドキュメント</a>。</div>
     </div>
   </article>
 
@@ -205,20 +221,66 @@ ggplot(mpg, aes(displ, hwy)) + geom_point()</code></pre></div>
       <span class="free-tag">モデルは持ち込み(BYOK)</span>
     </div>
     <div class="card-body">
-      <p style="margin:0 0 12px;font-size:14.5px;color:var(--ink)">2026年に RStudio へ搭載された新しいデータサイエンス向けエージェント。<b>R セッションを見られる</b>のが強みで、コンソール出力・プロット・環境内の変数を踏まえて、探索的分析・データ整形・モデリングを手伝います。Claude Code のように別途設定しなくても、あなたのデータや図を「見た」うえで動きます。</p>
+      <p style="margin:0 0 12px;font-size:14.5px;color:var(--ink)">2026年に RStudio へ搭載された新しいデータサイエンス向けエージェント。<b>R セッションを見られる</b>のが強みで、コンソール出力・プロット・環境内の変数を踏まえて、探索的分析・データ整形・モデリングを手伝います。別途コンテキストを渡さなくても、あなたのデータや図を「見た」うえで動きます。</p>
       <ol class="steps">
-        <li>最近の RStudio に同梱。サイドバーの <b>Posit Assistant</b>(チャット)ペインを開く。</li>
-        <li>モデルプロバイダを構成:<b>Anthropic(Claude・API キー)/ GitHub Copilot / OpenAI / Posit AI</b> から選んでサインイン。</li>
-        <li>データを読み込んだ状態で、日本語で「この分布を可視化して」等と指示する。</li>
+        <li>最近の RStudio に同梱(<b>Help → Check for Updates</b> で最新化)。サイドバーの <b>Posit Assistant</b>(チャット)ペインを開く。</li>
+        <li>モデルプロバイダを選ぶ:<b>Anthropic(Claude)/ GitHub Copilot / OpenAI / Posit AI</b>。Copilot を上で設定済みならそのまま Copilot サインインが手早い。Claude を使うなら <b>A</b> の手順で API キーを用意する。</li>
+        <li><b>A) Anthropic(Claude)の API キーを使う</b>
+          <p class="chip-label"><b>① キーを取得</b>:<a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a> でアカウントを作成 → <b>API Keys → Create Key</b> → 生成されたキー(<span class="mono">sk-ant-…</span> で始まる)をコピー。<b>表示は一度きり</b>なので確実に控える。従量課金なので少額(例:$5)のクレジットを入れておく。</p>
+          <p class="chip-label"><b>② Assistant に設定</b>:Posit Assistant ペインの設定でプロバイダに <b>Anthropic</b> を選び、①のキーを貼り付け。</p>
+          <p class="chip-label"><b>③ モデルを選ぶ</b>:標準は <b>Claude Sonnet 系</b>(能力と価格のバランス)。軽い用途なら <b>Haiku 系</b>(高速・安価)。</p>
+        </li>
+        <li>動作確認:<span class="mono">data(airquality)</span> を読み込んだ状態で、日本語で「<b>airquality の Ozone の分布を可視化して</b>」と指示。コード生成 → 実行提案 → Plots ペインに図、まで流れれば成功。</li>
+        <li>以後は、データを読み込んだ状態で「この分布を可視化して」「この2群を検定して」のように指示する。コード実行・ファイル編集は<b>承認制</b>。</li>
       </ol>
-      <div class="note"><b>BYOK(持ち込み)</b> ── モデル利用料は各プロバイダに直接支払い(例:Anthropic の API キー、Copilot のサブスク)。有効化手順は版で変わるため、着手時に <a href="https://docs.posit.co/" target="_blank" rel="noopener">Posit のドキュメント</a>で現行版を確認のこと。</div>
+      <div class="note"><b>BYOK(持ち込み)</b> ── モデル利用料は各プロバイダに直接支払い(例:Anthropic の API キー、Copilot のサブスク)。API キーは他人に見せず、スクリプトやリポジトリに貼らないこと。有効化手順は版で変わるため、着手時に <a href="https://docs.posit.co/" target="_blank" rel="noopener">Posit のドキュメント</a>で現行版を確認のこと。</div>
     </div>
   </article>
+
+  <div class="card spine">
+    <div class="card-body">
+      <h3>使い分けと切り替え</h3>
+      <p class="sub">2つは同時に動く。排他ではなく共存</p>
+      <p style="font-size:14.5px">Copilot は<b>エディタの中</b>で動き(タイプすると薄いゴーストテキストで続きが出る)、Posit Assistant は<b>専用のチャットペイン</b>で動きます。互いに干渉しないので、「切り替え」というより<b>今どちらの手を使うかを選ぶ</b>だけです。</p>
+      <ol class="steps">
+        <li><b>Copilot を使う</b> ── スクリプトを普通に編集し、出てきた候補を <span class="kbd">Tab</span> で確定。常時オンの背景アシスト。</li>
+        <li><b>Posit Assistant を使う</b> ── Assistant ペインを開き、やりたいことを日本語で書いて実行。データを読み込んだ状態で頼むと精度が上がる。コード実行は承認制。</li>
+        <li><b>補完が邪魔なとき</b> ── <b>Tools → Global Options → Assistant</b> で Copilot を一時的にオフにできる(設定はいつでも戻せる)。</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="card spine" style="border-left-color:#7A5CF0">
+      <div class="card-body">
+        <h3>Copilot が向く場面</h3>
+        <ul style="margin:0;padding-left:20px;font-size:14px">
+          <li>自分で書きながら、続きをサッと補完したい</li>
+          <li>ggplot の定型句・データ整形の1ステップ</li>
+          <li>タイピングの流れを止めたくない</li>
+          <li>関数名・引数をうろ覚えのときの補助</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card spine" style="border-left-color:#1E6FD0">
+      <div class="card-body">
+        <h3>Posit Assistant が向く場面</h3>
+        <ul style="margin:0;padding-left:20px;font-size:14px">
+          <li>読み込んだデータを見せて探索的分析を任せたい</li>
+          <li>「この図を作って」「この検定をして」の丸投げ</li>
+          <li>エラーメッセージの原因調査と修正</li>
+          <li>解析スクリプト全体の雛形作成</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="note"><b>判断の目安</b> ── 「<b>自分で書く隣に Copilot、まるごと任せるなら Posit Assistant</b>」。VS Code 資料の「Copilot と Cline」と同じ関係です。迷ったら、書き始めは Copilot、詰まって「全体を任せたい」と思ったら Assistant に渡す、で回せます。</div>
 
   <a class="bigref" href="rstudio-visualization-sample.html">
     <span class="no">APPENDIX · 可視化サンプル</span>
     <h3>別紙 — データを可視化するサンプルコード</h3>
-    <p>airquality を使って、ヒストグラム・棒・折れ線・散布図・回帰線を ggplot2 で描くコード集(コピーして実行)。</p>
+    <p>airquality を使って、ヒストグラム・棒・折れ線・散布図・回帰線を ggplot2 で描くコード集。各コードに<b>実際の実行結果(図・コンソール出力)</b>と読み方つき。</p>
     <span class="go">別紙を開く →</span>
   </a>
 
