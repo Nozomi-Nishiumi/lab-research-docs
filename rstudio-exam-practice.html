@@ -233,7 +233,117 @@ print(S3)</code></pre></div>
       <span class="vno">シナリオ 4</span>
       <div><h3>救難ヘリの操縦支援 — rgl による3D地形表示</h3><p class="vars">使用する変数:<span class="mono">mt.x</span>, <span class="mono">mt.y</span>, <span class="mono">mt.z</span>, <span class="mono">survivor</span>, <span class="mono">rescue_point</span> / 使用パッケージ:rgl</p></div>
     </div>
-    <p class="story">救難活動はヘリコプターを中心として実行されることとなった。救難ヘリに先行して、現場上空に捜索機が到着し、詳細な地形情報の収集がなされた。地形情報は水平x軸座標が <span class="mono">mt.x</span>、水平y軸座標が <span class="mono">mt.y</span>、鉛直z軸座標が <span class="mono">mt.z</span> に保存されている。この地形情報を三次元マップにし、さらに生存者の位置などの情報を統合して可視化し、後に続く救難ヘリのディスプレイに表示してパイロットを補助する。夜間飛行中であることを踏まえ、<b>パイロットの目への負担の少ないレイアウト</b>にする。</p>
+    <p class="story">救難活動はヘリコプターを中心として実行されることとなった。作戦には輸送ヘリ CH47・救難ヘリ UH60・捜索機 U125・無人偵察機 RQ4 が投入される(下は作戦シミュレーションのブリーフィング画面。これも R + rgl だけで描かれている)。</p>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">ブリーフィング画面 · rgl(スナップショット)</span></div><img src="img/exam-s4-briefing.png" alt="rglによる作戦ブリーフィング画面。ワイヤーフレームの富士山地形の上空にCH47・UH60・U125・RQ4の機体モデルが浮かぶ" width="1000" height="760" loading="lazy"></div>
+    <details class="ans"><summary>このブリーフィング画面の生成コードを見る(発展・鑑賞用)</summary><div class="inner">
+      <p style="font-size:13.5px;margin:4px 0 0">出題範囲外のおまけです。ポイントは3つ:①<span class="mono">readOBJ()</span> で市販の3Dモデル(.obj)を読み込み、<span class="mono">scale3d / rotate3d / translate3d</span> で実寸に合わせて配置できる。②地形は<b>国土地理院の標高タイル</b>を URL から直接読んで <span class="mono">persp3d()</span> でワイヤーフレーム化している。③<span class="mono">layout3d()</span> で上部のログ表示行と3Dシーンを分割し、<span class="mono">rgl.camera()</span>(rglplus)で視点を機体脇に置いている。機体の .obj ファイルは配布モデルの権利関係のため公開リポジトリには含めていません(研究室内は <span class="mono">Rsample/temp/</span> にあり)。</p>
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · ブリーフィング画面(要 temp/*.obj)</span><button class="cb-copy">COPY</button></div><pre><code>library(rgl); library(rglplus)
+
+<span class="cm"># ── 機体モデルの読み込みと実寸合わせ（.obj は研究室の Rsample/temp/ に）</span>
+base_ch47 &lt;- readOBJ(<span class="s">"temp/CH47_3.obj"</span>, material = list(color = <span class="s">"gray"</span>,
+                                       shininess = 0, speculer = 0, lit = FALSE))
+base_ch47 &lt;- scale3d(base_ch47, 5.6/50.10444, 5.6/50.10444, 5.6/50.10444)
+base_ch47 &lt;- rotate3d(base_ch47, -pi/2, 1, 0, 0)
+
+base_uh60 &lt;- readOBJ(<span class="s">"temp/uh60.obj"</span>, material = list(color = <span class="s">"gray"</span>,
+                                       shininess = 0, speculer = 0, lit = FALSE))
+base_uh60 &lt;- scale3d(base_uh60, 19.76/186.1887, 19.76/186.1887, 19.76/186.1887)
+base_uh60 &lt;- rotate3d(base_uh60, -pi/2, 1, 0, 0)
+base_uh60 &lt;- rotate3d(base_uh60, pi, 0, 0, 1)
+
+base_u125 &lt;- readOBJ(<span class="s">"temp/U-125.obj"</span>, material = list(color = <span class="s">"gray"</span>,
+                                        shininess = 0, speculer = 0, lit = FALSE))
+base_u125 &lt;- rotate3d(base_u125, -pi/2, 1, 0, 0)
+base_u125 &lt;- rotate3d(base_u125, -pi/2, 0, 0, 1)
+
+base_rq4 &lt;- readOBJ(<span class="s">"temp/RQ-4.obj"</span>, material = list(color = <span class="s">"gray"</span>,
+                                       shininess = 0, speculer = 0, lit = FALSE))
+base_rq4 &lt;- rotate3d(base_rq4, -pi/2, 1, 0, 0)
+
+<span class="cm"># ── 地形：国土地理院の標高タイル（富士山周辺）を直接読む</span>
+widemap &lt;- read.table(<span class="s">"http://cyberjapandata.gsi.go.jp/xyz/dem/9/453/202.txt"</span>, sep = <span class="s">","</span>)
+widemap &lt;- as.matrix(widemap)
+rwidemap &lt;- t(apply(widemap, 2, rev))
+map_meter_size &lt;- 7809.34
+
+wide.x &lt;- seq(0, map_meter_size*8, length = nrow(rwidemap))
+wide.y &lt;- seq(0, map_meter_size*8, length = ncol(rwidemap))
+wide.z &lt;- rwidemap
+
+<span class="cm"># ── 回転中心を指定位置に固定するための補助関数</span>
+setPivotPoint &lt;- function(pivotpoint){
+  bbox &lt;- par3d(<span class="s">"bbox"</span>)
+  rglsize &lt;- c(max(abs(bbox[1]-pivotpoint[1]), abs(bbox[2]-pivotpoint[1])),
+               max(abs(bbox[3]-pivotpoint[2]), abs(bbox[4]-pivotpoint[2])),
+               max(abs(bbox[5]-pivotpoint[3]), abs(bbox[6]-pivotpoint[3])))
+  corners &lt;- as.data.frame(rbind(pivotpoint+c(rglsize[1],0,0),
+                                 pivotpoint+c(-rglsize[1],0,0),
+                                 pivotpoint+c(0,rglsize[2],0),
+                                 pivotpoint+c(0,-rglsize[2],0),
+                                 pivotpoint+c(0,0,rglsize[3]),
+                                 pivotpoint+c(0,0,-rglsize[3])))
+  points3d(corners, alpha = 0)   <span class="cm"># 透明な点でバウンディングボックスを対称化</span>
+}
+
+pivotpoint &lt;- c(40000, 20000, 2500)
+
+<span class="cm"># ── シーン構築：上段にログ表示、下段に3Dシーン</span>
+close3d()
+open3d(windowRect = c(0, 0, 1000, 760))
+layout3d(matrix(1:2, 2, 1), heights = c(0.4, 8))
+bg3d(sphere = FALSE, fogtype = <span class="s">"none"</span>, color = hsv(0, 0, 0.1),
+     back = <span class="s">"lines"</span>, fogScale = 1)
+text3d(0, 0, 0, <span class="s">"sim. log --- Type: SAR, Op.Code: 164792, Date/Time: 2022-12-13, 0340H JST"</span>,
+       col = hsv(0, 0, 1), alpha = 0.9)
+next3d()
+
+persp3d(wide.x, wide.y, wide.z, col = <span class="s">"white"</span>, alpha = 0.1,
+        front = <span class="s">"lines"</span>, back = <span class="s">"lines"</span>,
+        lit = FALSE, axes = FALSE, xlab = <span class="s">""</span>, ylab = <span class="s">""</span>, zlab = <span class="s">""</span>)
+par3d(scale = c(1, 1, 1))
+bg3d(sphere = FALSE, fogtype = <span class="s">"none"</span>, color = c(<span class="s">"black"</span>, <span class="s">"black"</span>),
+     back = <span class="s">"lines"</span>, fogScale = 1)
+
+<span class="cm"># ── 各機体の向き・縮尺・配置</span>
+ch47 &lt;- rotate3d(base_ch47, -pi/6, 0, 0, 1)
+uh60 &lt;- rotate3d(base_uh60, -pi/6, 0, 0, 1)
+u125 &lt;- rotate3d(base_u125, -pi/3, 0, 0, 1)
+u125 &lt;- rotate3d(u125, pi/10, 0, 1, 0)
+rq4  &lt;- base_rq4
+
+ch47 &lt;- scale3d(ch47, 100, 100, 100)
+uh60 &lt;- scale3d(uh60, 100, 100, 100)
+u125 &lt;- scale3d(u125, 5, 5, 5)
+rq4  &lt;- scale3d(rq4, 5, 5, 5)
+
+loc_Fuji &lt;- c(30/100*map_meter_size*8, 82/100*map_meter_size*8, 3778)
+loc_cam  &lt;- c(pivotpoint[1]+3500, pivotpoint[2]-6300, pivotpoint[3]+100)
+loc_UH60 &lt;- c(pivotpoint[1]-4000, pivotpoint[2]+2000, pivotpoint[3])
+loc_CH47 &lt;- c(pivotpoint[1]+2500, pivotpoint[2]-1500, pivotpoint[3])
+loc_U125 &lt;- loc_Fuji + c(1000, 0, 2000)
+loc_RQ4  &lt;- loc_Fuji + c(0, 1000, 18000)
+
+ch47 &lt;- translate3d(ch47, loc_CH47[1], loc_CH47[2], loc_CH47[3])
+uh60 &lt;- translate3d(uh60, loc_UH60[1], loc_UH60[2], loc_UH60[3])
+u125 &lt;- translate3d(u125, loc_U125[1], loc_U125[2], loc_U125[3])
+rq4  &lt;- translate3d(rq4, loc_RQ4[1], loc_RQ4[2], loc_RQ4[3])
+
+shade3d(ch47, col = hsv(0.5, 1, 1), alpha = 0.1)
+shade3d(uh60, col = hsv(0.5, 1, 1), alpha = 0.1)
+shade3d(u125, col = hsv(0.5, 1, 1), alpha = 0.1)
+shade3d(rq4,  col = hsv(0.5, 1, 1), alpha = 0.1)
+
+texts3d(loc_CH47 + c(0, 0, 500), texts = <span class="s">"CH47"</span>, col = hsv(0.5, 1, 1), alpha = 0.5)
+texts3d(loc_UH60 + c(0, 0, 600), texts = <span class="s">"UH60"</span>, col = hsv(0.5, 1, 1), alpha = 0.5)
+texts3d(loc_U125 + c(0, 0, 200), texts = <span class="s">"U125"</span>, col = hsv(0.5, 1, 1), alpha = 0.5)
+texts3d(loc_RQ4  + c(0, 0, 200), texts = <span class="s">"RQ4"</span>,  col = hsv(0.5, 1, 1), alpha = 0.5)
+texts3d(loc_Fuji + c(0, 0, 400), texts = <span class="s">"Op. Area"</span>, col = <span class="s">"white"</span>, alpha = 0.5)
+
+<span class="cm"># ── 回転中心とカメラ（rglplus）</span>
+setPivotPoint(pivotpoint)
+rgl.camera(loc_cam, fov = 35)</code></pre></div>
+    </div></details>
+    <p class="story">救難ヘリに先行して、現場上空に捜索機が到着し、詳細な地形情報の収集がなされた。地形情報は水平x軸座標が <span class="mono">mt.x</span>、水平y軸座標が <span class="mono">mt.y</span>、鉛直z軸座標が <span class="mono">mt.z</span> に保存されている。この地形情報を三次元マップにし、さらに生存者の位置などの情報を統合して可視化し、後に続く救難ヘリのディスプレイに表示してパイロットを補助する。夜間飛行中であることを踏まえ、<b>パイロットの目への負担の少ないレイアウト</b>にする。</p>
     <div class="qs"><p class="qtitle">■ 設問</p>
       <ol class="steps">
         <li>地形情報 <span class="mono">mt.x</span>, <span class="mono">mt.y</span>, <span class="mono">mt.z</span> の座標に対して、<span class="mono">persp3d</span> 関数を用いて立体表示せよ。その際、寸法間隔を合わせるために、続けて <span class="mono">par3d(scale = c(1, 1, 1))</span> を実行せよ。</li>
