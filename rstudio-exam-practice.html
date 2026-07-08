@@ -99,7 +99,7 @@
 
   <p class="eyebrow">演習 · R ビジュアライゼーション</p>
   <h1>災害対応シナリオで学ぶ<br>R 可視化演習</h1>
-  <p class="lede">過去の期末試験「環境ビジュアライゼーション」(2025年1月実施)を自習用に再構成した演習です。架空の火山災害対応を軸に、地図(ggmap)・統計グラフ(ggplot2)・3D地形(rgl)・画像アノテーション・ダークテーマまで、7つのシナリオを通しで練習できます。各シナリオの<b>解答例は折りたたんであります</b>。まず自力でコードを書き、出力例と見比べてから開いてください。原本の試験問題にあった不備は修正済みです(<a href="#fixes">修正内容</a>)。</p>
+  <p class="lede">過去の期末試験「環境ビジュアライゼーション」(2025年1月実施)を自習用に再構成した演習です。架空の火山災害対応を軸に、地図(ggmap)・統計グラフ(ggplot2)・3D地形(rgl)・画像アノテーション・ダークテーマまで、7つのシナリオを通しで練習できます。各シナリオの<b>解答例は折りたたんであります</b>。まず自力でコードを書き、出力例と見比べてから開いてください。原本の試験問題にあった不備(誤記等)は修正済みです。</p>
 
   <nav class="toc">
     <a href="#prep">下準備</a>
@@ -235,9 +235,8 @@ print(S3)</code></pre></div>
       <span class="vno">シナリオ 4</span>
       <div><h3>救難ヘリの操縦支援 — rgl による3D地形表示</h3><p class="vars">使用する変数:<span class="mono">mt.x</span>, <span class="mono">mt.y</span>, <span class="mono">mt.z</span>, <span class="mono">survivor</span>, <span class="mono">rescue_point</span> / 使用パッケージ:rgl</p></div>
     </div>
-    <p class="story">救難活動はヘリコプターを中心として実行されることとなった。作戦には輸送ヘリ CH47・救難ヘリ UH60・捜索機 U125・無人偵察機 RQ4 が投入される(下は作戦シミュレーションのブリーフィング画面。これも R + rgl だけで描かれている)。</p>
-    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">ブリーフィング画面 · インタラクティブ3D — ドラッグで回転 / ホイールでズーム</span><a class="ob-open" href="widgets/exam-s4-briefing.html" target="_blank" rel="noopener">別タブで開く ↗</a></div><iframe src="widgets/exam-s4-briefing.html" title="作戦ブリーフィング画面(インタラクティブ3D)。ワイヤーフレームの富士山地形の上空にCH47・UH60・U125・RQ4の機体モデルが浮かぶ" loading="lazy"></iframe></div>
-    <div class="note"><b>操作</b> ── ドラッグで回転、ホイール(ピンチ)でズーム。機体モデルを含むため<b>約20MB</b>あり、表示まで少し時間がかかります。回転中心は CH47・UH60 の間に設定してあるので、ぐるっと回すと救難部隊の目線で富士山(Op. Area)を見渡せます。</div>
+    <p class="story">救難活動はヘリコプターを中心として実行されることとなった。</p>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">インタラクティブ3D — ドラッグで回転 / ホイールでズーム</span><a class="ob-open" href="widgets/exam-s4-briefing.html" target="_blank" rel="noopener">別タブで開く ↗</a></div><iframe src="widgets/exam-s4-briefing.html" title="作戦シミュレーション(インタラクティブ3D)。ワイヤーフレームの富士山地形の上空にCH47・UH60・U125・RQ4の機体モデルが浮かぶ" loading="lazy" style="height:360px"></iframe></div>
     <details class="ans"><summary>このブリーフィング画面の生成コードを見る(発展・鑑賞用)</summary><div class="inner">
       <p style="font-size:13.5px;margin:4px 0 0">出題範囲外のおまけです。ポイントは3つ:①<span class="mono">readOBJ()</span> で市販の3Dモデル(.obj)を読み込み、<span class="mono">scale3d / rotate3d / translate3d</span> で実寸に合わせて配置できる。②地形は<b>国土地理院の標高タイル</b>を URL から直接読んで <span class="mono">persp3d()</span> でワイヤーフレーム化している。③<span class="mono">layout3d()</span> で上部のログ表示行と3Dシーンを分割し、<span class="mono">rgl.camera()</span>(rglplus)で視点を機体脇に置いている。機体の .obj ファイルは配布モデルの権利関係のため公開リポジトリには含めていません(研究室内は <span class="mono">Rsample/temp/</span> にあり)。</p>
       <div class="cb"><div class="cb-head"><span class="cb-lang">R · ブリーフィング画面(要 temp/*.obj)</span><button class="cb-copy">COPY</button></div><pre><code>library(rgl); library(rglplus)
@@ -517,19 +516,6 @@ print(S7_advanced)</code></pre></div>
       <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s7-bar-sorted.png" alt="空き病床数順にソートした積み上げ棒グラフ" width="960" height="800" loading="lazy"></div>
       <div class="note"><b>読み方</b> ── 空き病床が最も多い USMC EH(青が最長)が最下部に来て、ひと目で搬送先候補と分かります。「どう並べるか」も可視化の設計の一部、というのがこの設問の狙いです。</div>
     </div></details>
-  </div>
-
-  <div class="card spine" id="fixes" style="border-left-color:var(--warn)">
-    <div class="card-body">
-      <h3>原本(試験実施時)からの修正点</h3>
-      <p class="sub">試験後に赤字で補足されていた不備を、このページでは本文に反映済み</p>
-      <ol class="steps" style="--vc:var(--warn)">
-        <li><b>シナリオ3</b> ── 原本の <span class="mono">elev_layer[[2]]</span>(テキスト描画レイヤー)は一部の環境で描画エラーになるため、当時は採点対象外とされた。本ページでは最初から <span class="mono">elev_layer[[1]]</span> のみを使う問題文に統一。</li>
-        <li><b>シナリオ5</b> ── 原本では <span class="mono">roi_pt</span> を「画像中の座標値4点」と記していたが、実データは<b>矩形の対角2点</b>(2行×2列)。当時は矩形を描ける関数を使っていれば一律正答とされた。本ページでは「対角2点(1行目が左下、2行目が右上)」に訂正。</li>
-        <li><b>シナリオ1</b> ── 試験当時に配布した Google API キーは公開ページには掲載できないため削除し、各自のキーを使う形に変更(キーなしでも設問2・3は練習可能)。</li>
-        <li><b>シナリオ7</b> ── 解答例の色指定を位置指定(<span class="mono">values = c("gray","blue")</span>)から水準名の明示指定に変更。出力は同じだが、factor の水準順に依存しない頑健な書き方に改めた。</li>
-      </ol>
-    </div>
   </div>
 
     <p class="foot">
