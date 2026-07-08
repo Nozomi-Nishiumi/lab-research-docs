@@ -69,6 +69,8 @@
   .ob-lang{font-family:var(--mono);font-size:11px;color:#5C6579;letter-spacing:.06em;font-weight:600;}
   .ob-dot{width:8px;height:8px;border-radius:50%;background:var(--vc,var(--r));flex:0 0 8px;}
   .ob img{display:block;width:100%;height:auto;}
+  .ob iframe{display:block;width:100%;height:500px;border:0;}
+  .ob-open{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--primary);border-bottom:none!important;}
   .ob pre{margin:0;background:#FBFCFE;color:#2A3550;font-family:var(--mono);font-size:12px;line-height:1.65;padding:13px 15px;overflow-x:auto;}
   .ob pre .em{color:var(--alt);font-weight:600;}
   .ob pre .warn{color:#B4442B;}
@@ -237,8 +239,8 @@ library(rgl)
 plot3d(aq$Temp, aq$Wind, aq$Ozone,
        type = <span class="s">"s"</span>, size = <span class="s">1</span>, col = <span class="s">"#3B3E9E"</span>,
        xlab = <span class="s">"Temp"</span>, ylab = <span class="s">"Wind"</span>, zlab = <span class="s">"Ozone"</span>)</code></pre></div>
-    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · rgl ウィンドウ(スナップショット)</span></div><img src="img/viz-6-rgl-scatter.png" alt="気温・風速・オゾンの3次元散布図。高温・弱風側でオゾンが高い" width="1120" height="760" loading="lazy"></div>
-    <div class="note"><b>ここが2Dと違う</b> ── 実行すると Plots ペインではなく<b>別ウィンドウ</b>に対話的な3Dビューが開きます。<b>ドラッグで回転、ホイールでズーム</b>。上の画像は見やすい向きに回してからのスナップショットなので、開いた直後の向きとは違って見えても正常です。<span class="mono">type = "s"</span> は点を球で描く指定。高温(Temp大)かつ弱風(Wind小)の隅でオゾンが高く盛り上がるのが回すとよく分かります。</div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · インタラクティブ3D — ドラッグで回転 / ホイールでズーム</span><a class="ob-open" href="widgets/viz6-scatter.html" target="_blank" rel="noopener">別タブで開く ↗</a></div><iframe src="widgets/viz6-scatter.html" title="気温・風速・オゾンの3次元散布図(インタラクティブ)" loading="lazy"></iframe></div>
+    <div class="note"><b>ここが2Dと違う</b> ── 実行すると Plots ペインではなく<b>別ウィンドウ</b>に対話的な3Dビューが開きます。<b>ドラッグで回転、ホイールでズーム</b>(上の埋め込みも同じ操作で動かせます。RStudio から HTML に書き出すには <span class="mono">rglwidget()</span> を使います)。開いた直後の向きがこれと違って見えても正常です。<span class="mono">type = "s"</span> は点を球で描く指定。高温(Temp大)かつ弱風(Wind小)の隅でオゾンが高く盛り上がるのが回すとよく分かります。</div>
     <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 重回帰 Ozone ~ Temp + Wind の回帰平面を重ねる</span>
 model3d &lt;- lm(Ozone ~ Temp + Wind, data = aq)
 cf &lt;- coef(model3d)
@@ -246,7 +248,7 @@ planes3d(cf[<span class="s">"Temp"</span>], cf[<span class="s">"Wind"</span>], <
          alpha = <span class="s">0.4</span>, col = <span class="s">"#C2557F"</span>)
 
 summary(model3d)</code></pre></div>
-    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · rgl ウィンドウ(スナップショット)</span></div><img src="img/viz-6-rgl-plane.png" alt="3次元散布図に重回帰の回帰平面を重ねた図" width="1120" height="760" loading="lazy"></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · インタラクティブ3D — ドラッグで回転 / ホイールでズーム</span><a class="ob-open" href="widgets/viz6-plane.html" target="_blank" rel="noopener">別タブで開く ↗</a></div><iframe src="widgets/viz6-plane.html" title="3次元散布図と回帰平面(インタラクティブ)" loading="lazy"></iframe></div>
     <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Console</span></div><pre>Call:
 lm(formula = Ozone ~ Temp + Wind, data = aq)
 

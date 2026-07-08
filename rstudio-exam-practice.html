@@ -62,6 +62,8 @@
   .ob-lang{font-family:var(--mono);font-size:11px;color:#5C6579;letter-spacing:.06em;font-weight:600;}
   .ob-dot{width:8px;height:8px;border-radius:50%;background:var(--vc,var(--pose));flex:0 0 8px;}
   .ob img{display:block;width:100%;height:auto;}
+  .ob iframe{display:block;width:100%;height:540px;border:0;background:#000;}
+  .ob-open{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--primary);border-bottom:none!important;}
   .ob pre{margin:0;background:#FBFCFE;color:#2A3550;font-family:var(--mono);font-size:12px;line-height:1.65;padding:13px 15px;overflow-x:auto;}
 
   /* scenario block */
@@ -234,7 +236,8 @@ print(S3)</code></pre></div>
       <div><h3>救難ヘリの操縦支援 — rgl による3D地形表示</h3><p class="vars">使用する変数:<span class="mono">mt.x</span>, <span class="mono">mt.y</span>, <span class="mono">mt.z</span>, <span class="mono">survivor</span>, <span class="mono">rescue_point</span> / 使用パッケージ:rgl</p></div>
     </div>
     <p class="story">救難活動はヘリコプターを中心として実行されることとなった。作戦には輸送ヘリ CH47・救難ヘリ UH60・捜索機 U125・無人偵察機 RQ4 が投入される(下は作戦シミュレーションのブリーフィング画面。これも R + rgl だけで描かれている)。</p>
-    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">ブリーフィング画面 · rgl(スナップショット)</span></div><img src="img/exam-s4-briefing.png" alt="rglによる作戦ブリーフィング画面。ワイヤーフレームの富士山地形の上空にCH47・UH60・U125・RQ4の機体モデルが浮かぶ" width="1000" height="760" loading="lazy"></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">ブリーフィング画面 · インタラクティブ3D — ドラッグで回転 / ホイールでズーム</span><a class="ob-open" href="widgets/exam-s4-briefing.html" target="_blank" rel="noopener">別タブで開く ↗</a></div><iframe src="widgets/exam-s4-briefing.html" title="作戦ブリーフィング画面(インタラクティブ3D)。ワイヤーフレームの富士山地形の上空にCH47・UH60・U125・RQ4の機体モデルが浮かぶ" loading="lazy"></iframe></div>
+    <div class="note"><b>操作</b> ── ドラッグで回転、ホイール(ピンチ)でズーム。機体モデルを含むため<b>約20MB</b>あり、表示まで少し時間がかかります。回転中心は CH47・UH60 の間に設定してあるので、ぐるっと回すと救難部隊の目線で富士山(Op. Area)を見渡せます。</div>
     <details class="ans"><summary>このブリーフィング画面の生成コードを見る(発展・鑑賞用)</summary><div class="inner">
       <p style="font-size:13.5px;margin:4px 0 0">出題範囲外のおまけです。ポイントは3つ:①<span class="mono">readOBJ()</span> で市販の3Dモデル(.obj)を読み込み、<span class="mono">scale3d / rotate3d / translate3d</span> で実寸に合わせて配置できる。②地形は<b>国土地理院の標高タイル</b>を URL から直接読んで <span class="mono">persp3d()</span> でワイヤーフレーム化している。③<span class="mono">layout3d()</span> で上部のログ表示行と3Dシーンを分割し、<span class="mono">rgl.camera()</span>(rglplus)で視点を機体脇に置いている。機体の .obj ファイルは配布モデルの権利関係のため公開リポジトリには含めていません(研究室内は <span class="mono">Rsample/temp/</span> にあり)。</p>
       <div class="cb"><div class="cb-head"><span class="cb-lang">R · ブリーフィング画面(要 temp/*.obj)</span><button class="cb-copy">COPY</button></div><pre><code>library(rgl); library(rglplus)
@@ -377,8 +380,8 @@ texts3d(rescue_point$x, rescue_point$y + 10, rescue_point$z + 100,
 
 <span class="cm"># 視点の調整（マウスでも回せる）</span>
 view3d(theta = 0, phi = -70, zoom = 0.3, scale = par3d(<span class="s">"scale"</span>), interactive = TRUE)</code></pre></div>
-      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · rgl ウィンドウ(スナップショット)</span></div><img src="img/exam-s4-3d.png" alt="黒背景にシアンのワイヤーフレーム地形、ピンクの経路と時刻、オレンジの救助地点" width="1120" height="760" loading="lazy"></div>
-      <div class="note"><b>読み方</b> ── 黒背景+ワイヤーフレームは夜間コックピットの定番配色(輝度を絞って暗順応を守る)。生存者は 15:33 の山頂付近から一晩かけて西斜面を下り、02:01 の最終報告位置の先、下山方向の延長線上に着陸予定地点(LZ)が設定されています。点が円ではなく四角で描かれることがありますが、rgl の仕様なので気にしなくて構いません。図を保存するには <span class="mono">rgl.snapshot("s4.png")</span>。</div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · インタラクティブ3D — ドラッグで回転 / ホイールでズーム</span><a class="ob-open" href="widgets/exam-s4-answer.html" target="_blank" rel="noopener">別タブで開く ↗</a></div><iframe src="widgets/exam-s4-answer.html" title="夜間救難ディスプレイ(インタラクティブ3D)。ワイヤーフレーム地形にピンクの経路と時刻、オレンジの救助地点" loading="lazy"></iframe></div>
+      <div class="note"><b>読み方</b> ── 黒背景+ワイヤーフレームは夜間コックピットの定番配色(輝度を絞って暗順応を守る)。生存者は 15:33 の山頂付近から一晩かけて西斜面を下り、02:01 の最終報告位置の先、下山方向の延長線上に着陸予定地点(LZ)が設定されています。点が円ではなく四角で描かれることがありますが、rgl(WebGL)の仕様なので気にしなくて構いません。この埋め込みのような HTML 書き出しは <span class="mono">rglwidget()</span>、静止画の保存は <span class="mono">rgl.snapshot("s4.png")</span>。</div>
     </div></details>
   </div>
 
