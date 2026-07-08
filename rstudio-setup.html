@@ -130,7 +130,7 @@
           <li><a href="https://cran.r-project.org/" target="_blank" rel="noopener">cran.r-project.org</a> → <b>Download R for macOS</b>。</li>
           <li>チップに合うビルドを選ぶ。<b>Apple メニュー → このMacについて</b>で、「チップ」が M 系なら <b>arm64</b>、「プロセッサ」に Intel とあれば <b>Intel</b> 版。</li>
           <li>ダウンロードした <span class="mono">.pkg</span> を実行し、指示どおり進める。</li>
-          <li>グラフィックスの一部で必要になるので <a href="https://www.xquartz.org/" target="_blank" rel="noopener">XQuartz</a> も入れておく(任意)。</li>
+          <li>3D可視化(<a href="rstudio-visualization-sample.html">別紙</a>の rgl)などで必要になるので <a href="https://www.xquartz.org/" target="_blank" rel="noopener">XQuartz</a> も入れておく(推奨。入れたら Mac を再起動)。</li>
         </ol>
       </div>
     </div>
@@ -280,7 +280,7 @@ ggplot(mpg, aes(displ, hwy)) + geom_point()</code></pre></div>
   <a class="bigref" href="rstudio-visualization-sample.html">
     <span class="no">APPENDIX · 可視化サンプル</span>
     <h3>別紙 — データを可視化するサンプルコード</h3>
-    <p>airquality を使って、ヒストグラム・棒・折れ線・散布図・回帰線を ggplot2 で描くコード集。各コードに<b>実際の実行結果(図・コンソール出力)</b>と読み方つき。</p>
+    <p>airquality を使って、ヒストグラム・棒・折れ線・散布図・回帰線(ggplot2)と3次元散布図(rgl)を描くコード集。各コードに<b>実際の実行結果(図・コンソール出力)</b>と読み方つき。</p>
     <span class="go">別紙を開く →</span>
   </a>
 

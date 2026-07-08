@@ -43,3 +43,22 @@ ggplot(aq, aes(x = Temp, y = Ozone)) +
 
 # 回帰係数・決定係数の確認
 summary(lm(Ozone ~ Temp, data = aq))
+
+# 6. 3次元散布図（rgl）：気温 × 風速 × オゾン ----------------
+# 必要: install.packages("rgl")  # 初回のみ
+# 別ウィンドウに対話的3Dが開く（ドラッグで回転・ホイールでズーム）
+library(rgl)
+
+plot3d(aq$Temp, aq$Wind, aq$Ozone,
+       type = "s", size = 1, col = "#3B3E9E",
+       xlab = "Temp", ylab = "Wind", zlab = "Ozone")
+
+# 重回帰 Ozone ~ Temp + Wind の回帰平面を重ねる
+model3d <- lm(Ozone ~ Temp + Wind, data = aq)
+cf <- coef(model3d)
+planes3d(cf["Temp"], cf["Wind"], -1, cf["(Intercept)"],
+         alpha = 0.4, col = "#C2557F")
+
+summary(model3d)
+
+# 画像として保存するとき: rgl.snapshot("plot3d.png")

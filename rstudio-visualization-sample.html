@@ -97,7 +97,7 @@
 
   <p class="eyebrow">別紙 · 可視化サンプル</p>
   <h1>データを可視化する<br>サンプルコード</h1>
-  <p class="lede"><a href="rstudio-setup.html">RStudio 導入</a>の別紙です。base R 同梱の <span class="mono">airquality</span>(1973年NYの大気観測)を使い、ggplot2 でヒストグラム・棒・折れ線・散布図・回帰線を描きます。新規スクリプト(<span class="kbd">⇧⌘N</span> / <span class="kbd">Ctrl+Shift+N</span>)に貼り、各行で <span class="kbd">⌘⏎</span> / <span class="kbd">Ctrl+Enter</span> を押すと右下の <b>Plots</b> ペインに図が出ます。各コードの下には<b>実際に実行したときの出力</b>(図・コンソール)を載せているので、手元の結果と見比べてください。まず下準備を実行してから各図を試します。</p>
+  <p class="lede"><a href="rstudio-setup.html">RStudio 導入</a>の別紙です。base R 同梱の <span class="mono">airquality</span>(1973年NYの大気観測)を使い、ggplot2 でヒストグラム・棒・折れ線・散布図・回帰線を、rgl で3次元散布図を描きます。新規スクリプト(<span class="kbd">⇧⌘N</span> / <span class="kbd">Ctrl+Shift+N</span>)に貼り、各行で <span class="kbd">⌘⏎</span> / <span class="kbd">Ctrl+Enter</span> を押すと右下の <b>Plots</b> ペインに図が出ます。各コードの下には<b>実際に実行したときの出力</b>(図・コンソール)を載せているので、手元の結果と見比べてください。まず下準備を実行してから各図を試します。</p>
 
   <nav class="toc">
     <a href="rstudio-setup.html">← RStudio 導入に戻る</a>
@@ -222,6 +222,54 @@ F-statistic: 108.5 on 1 and 114 DF,  p-value: &lt; 2.2e-16</pre></div>
     <div class="note"><b>結果の読み方</b> ── <b>Temp の係数 2.43</b>:気温が1°F上がるとオゾンが平均約2.4ppb増える。<b>Pr(&gt;|t|) &lt; 2e-16</b>:この関係が偶然である可能性はほぼゼロ(統計的に有意)。<b>R² = 0.49</b>:オゾンの変動の約49%が気温だけで説明できる。<span class="mono">(37 observations deleted due to missingness)</span> は散布図と同じく NA の37日分が除かれたことを示します。</div>
   </div>
 
+  <!-- 6 rgl 3D -->
+  <div class="viz" style="--vc:#3B7A9E">
+    <div class="viz-head">
+      <span class="vno">06</span>
+      <div><h3>6. 3次元散布図(rgl)</h3><p>3変数の関係を立体で。気温 × 風速 × オゾン。<b>マウスで回せる対話的3D</b>。</p></div>
+    </div>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 初回のみ（インストール）</span>
+install.packages(<span class="s">"rgl"</span>)
+
+library(rgl)
+
+<span class="cm"># 3次元散布図：x=気温, y=風速, z=オゾン</span>
+plot3d(aq$Temp, aq$Wind, aq$Ozone,
+       type = <span class="s">"s"</span>, size = <span class="s">1</span>, col = <span class="s">"#3B3E9E"</span>,
+       xlab = <span class="s">"Temp"</span>, ylab = <span class="s">"Wind"</span>, zlab = <span class="s">"Ozone"</span>)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · rgl ウィンドウ(スナップショット)</span></div><img src="img/viz-6-rgl-scatter.png" alt="気温・風速・オゾンの3次元散布図。高温・弱風側でオゾンが高い" width="1120" height="760" loading="lazy"></div>
+    <div class="note"><b>ここが2Dと違う</b> ── 実行すると Plots ペインではなく<b>別ウィンドウ</b>に対話的な3Dビューが開きます。<b>ドラッグで回転、ホイールでズーム</b>。上の画像は見やすい向きに回してからのスナップショットなので、開いた直後の向きとは違って見えても正常です。<span class="mono">type = "s"</span> は点を球で描く指定。高温(Temp大)かつ弱風(Wind小)の隅でオゾンが高く盛り上がるのが回すとよく分かります。</div>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 重回帰 Ozone ~ Temp + Wind の回帰平面を重ねる</span>
+model3d &lt;- lm(Ozone ~ Temp + Wind, data = aq)
+cf &lt;- coef(model3d)
+planes3d(cf[<span class="s">"Temp"</span>], cf[<span class="s">"Wind"</span>], <span class="s">-1</span>, cf[<span class="s">"(Intercept)"</span>],
+         alpha = <span class="s">0.4</span>, col = <span class="s">"#C2557F"</span>)
+
+summary(model3d)</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · rgl ウィンドウ(スナップショット)</span></div><img src="img/viz-6-rgl-plane.png" alt="3次元散布図に重回帰の回帰平面を重ねた図" width="1120" height="760" loading="lazy"></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Console</span></div><pre>Call:
+lm(formula = Ozone ~ Temp + Wind, data = aq)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-41.251 -13.695  -2.856  11.390 100.367
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -71.0332    23.5780  -3.013   0.0032 **
+<span class="em">Temp          1.8402     0.2500   7.362 3.15e-11 ***</span>
+<span class="em">Wind         -3.0555     0.6633  -4.607 1.08e-05 ***</span>
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 21.85 on 113 degrees of freedom
+  (37 observations deleted due to missingness)
+<span class="em">Multiple R-squared:  0.5687</span>,	Adjusted R-squared:  0.5611
+F-statistic:  74.5 on 2 and 113 DF,  p-value: &lt; 2.2e-16</pre></div>
+    <div class="note"><b>結果の読み方</b> ── 2枚目の図の平面が「重回帰モデルの予測面」。5番の回帰直線の3次元版です。<b>Temp の係数 1.84</b>:風速が同じなら、気温が1°F上がるとオゾンが約1.8ppb増える。<b>Wind の係数 −3.06</b>:気温が同じなら、風が1mph強いとオゾンが約3.1ppb<b>減る</b>(風が汚染物質を吹き払う)。<b>R² = 0.57</b>:説明変数を Temp だけ(5番・R²=0.49)から2つに増やしたことで、説明できる変動が49%→57%に向上。<span class="mono">planes3d(a, b, c, d)</span> は平面 <span class="mono">ax+by+cz+d=0</span> を描く関数なので、z(オゾン)の係数に −1 を入れています。</div>
+    <div class="note"><b>つまずき対策(Mac)</b> ── 3Dウィンドウが開かない場合は <a href="https://www.xquartz.org/" target="_blank" rel="noopener">XQuartz</a> を入れて Mac を再起動(<a href="rstudio-setup.html">導入ページ</a> PART 01 で「入れておく」とした XQuartz はこのためです)。図を画像として保存するには <span class="mono">rgl.snapshot("plot3d.png")</span>、レポートや HTML に対話的なまま埋め込むには <span class="mono">rglwidget()</span> を使います。</div>
+  </div>
+
   <div class="card spine">
     <div class="card-body">
       <h3>まとめて実行する</h3>
@@ -263,8 +311,20 @@ ggplot(aq, aes(Temp, Ozone)) +
   geom_smooth(method = <span class="s">"lm"</span>, se = <span class="s">TRUE</span>, color = <span class="s">"#8E3B5E"</span>) +
   labs(title = <span class="s">"回帰：オゾン ~ 気温"</span>, x = <span class="s">"気温 (°F)"</span>, y = <span class="s">"オゾン (ppb)"</span>)
 
-summary(lm(Ozone ~ Temp, data = aq))</code></pre></div>
-      <div class="note"><b>実行環境</b> ── このページの出力は R 4.4.1 + ggplot2 で実際に実行して得たものです。バージョンが違っても図の見た目(フォント・配色の細部)以外は同じ結果になります。</div>
+summary(lm(Ozone ~ Temp, data = aq))
+
+<span class="cm"># 6. 3次元散布図（rgl・初回のみ install.packages("rgl")）</span>
+library(rgl)
+plot3d(aq$Temp, aq$Wind, aq$Ozone,
+       type = <span class="s">"s"</span>, size = <span class="s">1</span>, col = <span class="s">"#3B3E9E"</span>,
+       xlab = <span class="s">"Temp"</span>, ylab = <span class="s">"Wind"</span>, zlab = <span class="s">"Ozone"</span>)
+
+model3d &lt;- lm(Ozone ~ Temp + Wind, data = aq)
+cf &lt;- coef(model3d)
+planes3d(cf[<span class="s">"Temp"</span>], cf[<span class="s">"Wind"</span>], <span class="s">-1</span>, cf[<span class="s">"(Intercept)"</span>],
+         alpha = <span class="s">0.4</span>, col = <span class="s">"#C2557F"</span>)
+summary(model3d)</code></pre></div>
+      <div class="note"><b>実行環境</b> ── このページの出力は R 4.4.1 + ggplot2 / rgl で実際に実行して得たものです。バージョンが違っても図の見た目(フォント・配色の細部)以外は同じ結果になります。</div>
     </div>
   </div>
 
