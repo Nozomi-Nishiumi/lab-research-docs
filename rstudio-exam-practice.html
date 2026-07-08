@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演習 — 災害対応シナリオで学ぶ R 可視化(過去問)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EBEEF4;--panel:#FFFFFF;--ink:#131A2B;--muted:#5C6579;--line:#DCE1EA;
+    --primary:#3B3E9E;--r:#1E6FD0;--pose:#12857A;--alt:#8E3B5E;--warn:#C0472B;
+    --code-bg:#0E1526;--code-ink:#D9E2F1;--code-dim:#7A88A8;--radius:14px;
+    --display:"Space Grotesk","Noto Sans JP",sans-serif;
+    --body:"Noto Sans JP",sans-serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.8;letter-spacing:.01em;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:56px 22px 96px;}
+
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--pose);margin:0 0 14px;font-weight:600;}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5.4vw,42px);line-height:1.2;margin:0 0 16px;letter-spacing:-.01em;}
+  .lede{color:var(--muted);font-size:16px;max-width:62ch;margin:0 0 30px;}
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 50px;}
+  .toc a{font-family:var(--mono);font-size:12.5px;padding:6px 13px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--ink);text-decoration:none;}
+  .toc a:hover{border-color:var(--pose);color:var(--pose);}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:24px;overflow:hidden;}
+  .card.spine{border-left:5px solid var(--pose);}
+  .card-body{padding:20px 26px 24px;}
+  .card h3{font-family:var(--display);font-size:18px;margin:0 0 4px;}
+  .card .sub{font-size:13px;color:var(--muted);margin:0 0 12px;}
+
+  ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;}
+  ol.steps>li{counter-increment:s;position:relative;padding:11px 0 11px 42px;border-top:1px solid var(--line);}
+  ol.steps>li:first-child{border-top:none;}
+  ol.steps>li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:11px;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--vc,var(--pose));line-height:1.8;}
+  ol.steps b{font-weight:700;}
+  .kbd{font-family:var(--mono);font-size:12px;background:#EEF1F7;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;white-space:nowrap;}
+  .mono{font-family:var(--mono);font-size:12.5px;background:#EEF1F7;padding:1px 6px;border-radius:5px;}
+
+  .note{margin-top:16px;background:color-mix(in srgb,var(--vc,var(--pose)) 6%,var(--panel));border:1px solid color-mix(in srgb,var(--vc,var(--pose)) 24%,var(--line));border-radius:10px;padding:12px 15px;font-size:13.5px;}
+  .note b{color:var(--vc,var(--pose));}
+  .note.warn{--vc:var(--warn);}
+
+  /* code blocks (input) */
+  .cb{border-radius:11px;overflow:hidden;border:1px solid #1D2740;margin:12px 0 0;}
+  .cb-head{display:flex;align-items:center;justify-content:space-between;background:#141D33;padding:6px 12px;}
+  .cb-lang{font-family:var(--mono);font-size:11px;color:var(--code-dim);letter-spacing:.06em;}
+  .cb-copy{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:none;background:transparent;color:var(--code-dim);cursor:pointer;padding:2px 6px;border-radius:5px;}
+  .cb-copy:hover{background:#212D4B;color:#fff;}
+  .cb-copy.done{color:#6FE0A6;}
+  .cb pre{margin:0;background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);font-size:12.5px;line-height:1.7;padding:13px 15px;overflow-x:auto;}
+  .cb pre .cm{color:#6E7F9E;}
+  .cb pre .s{color:#8BD5A0;}
+
+  /* output blocks */
+  .ob{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:12px 0 0;background:#fff;}
+  .ob-head{display:flex;align-items:center;gap:8px;background:#F2F5FA;border-bottom:1px solid var(--line);padding:6px 12px;}
+  .ob-lang{font-family:var(--mono);font-size:11px;color:#5C6579;letter-spacing:.06em;font-weight:600;}
+  .ob-dot{width:8px;height:8px;border-radius:50%;background:var(--vc,var(--pose));flex:0 0 8px;}
+  .ob img{display:block;width:100%;height:auto;}
+  .ob pre{margin:0;background:#FBFCFE;color:#2A3550;font-family:var(--mono);font-size:12px;line-height:1.65;padding:13px 15px;overflow-x:auto;}
+
+  /* scenario block */
+  .viz{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;border-left:5px solid var(--vc,var(--pose));}
+  .viz-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+  .viz .vno{font-family:var(--mono);font-weight:600;font-size:13px;color:#fff;background:var(--vc,var(--pose));padding:5px 10px;flex:0 0 auto;border-radius:9px;}
+  .viz h3{font-family:var(--display);font-size:17px;margin:0 0 3px;}
+  .viz .vars{font-size:12.5px;color:var(--muted);margin:0;}
+  .viz .story{font-size:14.5px;margin:10px 0 0;}
+  .viz .qs{margin:12px 0 0;}
+  .viz .qs .qtitle{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.12em;color:var(--vc,var(--pose));margin:0 0 4px;}
+  .viz .datadesc{margin:10px 0 0;background:#F7F9FD;border:1px solid var(--line);border-radius:9px;padding:10px 14px;font-family:var(--mono);font-size:12px;line-height:1.7;overflow-x:auto;}
+
+  /* collapsible answer */
+  details.ans{margin:14px 0 0;border:1px solid color-mix(in srgb,var(--vc,var(--pose)) 30%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--vc,var(--pose)) 4%,var(--panel));overflow:hidden;}
+  details.ans summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:14px;padding:11px 16px;color:var(--vc,var(--pose));list-style:none;user-select:none;}
+  details.ans summary::-webkit-details-marker{display:none;}
+  details.ans summary::before{content:"▸ ";font-family:var(--mono);}
+  details.ans[open] summary::before{content:"▾ ";}
+  details.ans .inner{padding:0 16px 16px;}
+
+  .foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);}
+  a{color:var(--primary);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--primary) 35%,transparent);}
+  a:hover{border-bottom-color:var(--primary);}
+  .toc a{border-bottom:none;}
+  :focus-visible{outline:2.5px solid var(--pose);outline-offset:2px;border-radius:4px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+  @media (max-width:560px){.wrap{padding:40px 16px 70px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">演習 · R ビジュアライゼーション</p>
+  <h1>災害対応シナリオで学ぶ<br>R 可視化演習</h1>
+  <p class="lede">過去の期末試験「環境ビジュアライゼーション」(2025年1月実施)を自習用に再構成した演習です。架空の火山災害対応を軸に、地図(ggmap)・統計グラフ(ggplot2)・3D地形(rgl)・画像アノテーション・ダークテーマまで、7つのシナリオを通しで練習できます。各シナリオの<b>解答例は折りたたんであります</b>。まず自力でコードを書き、出力例と見比べてから開いてください。原本の試験問題にあった不備は修正済みです(<a href="#fixes">修正内容</a>)。</p>
+
+  <nav class="toc">
+    <a href="#prep">下準備</a>
+    <a href="#s1">S1 地図</a>
+    <a href="#s2">S2 ヒストグラム</a>
+    <a href="#s3">S3 ヒートマップ</a>
+    <a href="#s4">S4 3D地形</a>
+    <a href="#s5">S5 画像</a>
+    <a href="#s6">S6 心電図</a>
+    <a href="#s7">S7 棒グラフ</a>
+    <a href="index.html">← 資料一覧</a>
+  </nav>
+
+  <div class="card spine" id="prep">
+    <div class="card-body">
+      <h3>下準備:データの入手と読み込み</h3>
+      <p class="sub">全シナリオのデータは1つの RData に同封</p>
+      <ol class="steps">
+        <li><a href="data/exam_data.RData" download>exam_data.RData</a>(約25MB)をダウンロードする。</li>
+        <li>RStudio で新規スクリプトを作り、<b>RData と同じフォルダに保存</b>。メニューの <b>Session → Set Working Directory → To Source File Location</b> で作業ディレクトリを合わせる。</li>
+        <li>以下の準備コードを実行する(不足パッケージは自動インストール)。</li>
+      </ol>
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · INPUT</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 描画デバイスと環境の初期化</span>
+if( dev.cur() &gt; 1 ) dev.off()
+rm( list = ls( envir = globalenv() ), envir = globalenv() )
+
+<span class="cm"># 使用パッケージ（無ければ自動インストール）</span>
+targetPackages &lt;- c(<span class="s">"tidyverse"</span>, <span class="s">"ggmap"</span>, <span class="s">"RgoogleMaps"</span>, <span class="s">"rgl"</span>)
+newPackages &lt;- targetPackages[!(targetPackages %in% installed.packages()[,<span class="s">"Package"</span>])]
+if(length(newPackages)) install.packages(newPackages, repos = <span class="s">"https://cloud.r-project.org"</span>)
+for(package in targetPackages) library(package, character.only = TRUE)
+
+<span class="cm"># 演習データの読み込み（15個の変数がロードされる）</span>
+load(<span class="s">"exam_data.RData"</span>)</code></pre></div>
+      <div class="note"><b>ヒント</b> ── ロードされた変数は Environment ペインに一覧される。中身に迷ったら <span class="mono">head(変数名)</span> や <span class="mono">str(変数名)</span> でまず覗くこと。Mac で rgl(シナリオ4)を使うには XQuartz が必要(<a href="rstudio-setup.html">導入ページ</a>参照)。</div>
+    </div>
+  </div>
+
+  <!-- S1 -->
+  <div class="viz" id="s1" style="--vc:#1E6FD0">
+    <div class="viz-head">
+      <span class="vno">シナリオ 1</span>
+      <div><h3>震源をさがす — 地図と密度等高線</h3><p class="vars">使用する変数:<span class="mono">eq_p</span> / 使用パッケージ:ggmap</p></div>
+    </div>
+    <p class="story">過去数年において検出されたことのない異常なパターンの微弱な地震が各地で観測された。状況分析のため、まず震源を特定することとなった。過去3時間以内の観測地点(経度・緯度)が <span class="mono">eq_p</span> に保存されている。</p>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li>日本地図を Google マップから取得せよ。取得の際、マップの中心を <span class="mono">"tokyo"</span> に設定し、zoom 率は 8、マップのタイプは <span class="mono">roadmap</span> にせよ。</li>
+        <li>観測地点 <span class="mono">eq_p</span> を、1. で取得したマップに点としてプロットせよ。</li>
+        <li>取得したマップにプロット地点の密度等高線を追加せよ。</li>
+      </ol>
+    </div>
+    <div class="note warn"><b>API キーについて</b> ── Google マップの取得には各自の API キーが必要です(試験当時は共用キーを配布していましたが、現在は無効化済み。公開ページのため掲載もしません)。<a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a> でプロジェクトを作り、Maps Static API を有効化+課金設定してキーを取得し、下のコードの <span class="mono">YOUR_API_KEY</span> を置き換えてください。キーなしで練習する場合は、ベースマップを省いて点と等高線だけ描いても設問2・3の練習になります。</div>
+    <details class="ans"><summary>解答例を開く</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>register_google(key = <span class="s">"YOUR_API_KEY"</span>)
+tkmap &lt;- qmap(<span class="s">"tokyo"</span>, zoom = 8, maptype = <span class="s">"roadmap"</span>)
+p &lt;- geom_point(data = eq_p, aes(x = Longitude, y = Latitude))
+d &lt;- geom_density_2d(data = eq_p, aes(x = Longitude, y = Latitude))
+S1 &lt;- tkmap + p + d
+print(S1)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · 参考(ベースマップなし)</span></div><img src="img/exam-s1-nomap.png" alt="観測点と密度等高線のみの参考出力。等高線の中心が富士山付近を示す" width="960" height="960" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── ポイントは、ggmap で取得した地図が「ggplot の土台」になっていて、通常の <span class="mono">geom_*</span> をそのまま <span class="mono">+</span> で重ねられること。密度等高線の中心、つまり推定震源は富士山付近(経度138.7・緯度35.4あたり)に収束します。API キーがあれば、この図の背景に道路地図が敷かれた状態になります。</div>
+    </div></details>
+  </div>
+
+  <!-- S2 -->
+  <div class="viz" id="s2" style="--vc:#12857A">
+    <div class="viz-head">
+      <span class="vno">シナリオ 2</span>
+      <div><h3>地震のタイプ判別 — 重ね合わせヒストグラム</h3><p class="vars">使用する変数:<span class="mono">report_data</span></p></div>
+    </div>
+    <p class="story">この地震の揺れのパターンから、地震の原因を判別する。観測された揺れの周期性の分布を、過去に報告されている火山性の地震と、そうでない地震の周期と照らし合わせる。<span class="mono">report_data</span> の各列は以下の通り。</p>
+    <div class="datadesc">normal:   火山と関連しない地震における揺れの周期のデータ<br>eruption: 火山と関連する地震における揺れの周期のデータ<br>report:   今回観測された地震における揺れの周期のデータ</div>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li><span class="mono">normal</span>・<span class="mono">eruption</span>・<span class="mono">report</span> のそれぞれのデータの分布を三つのヒストグラムにして一つの図にせよ。</li>
+        <li><span class="mono">normal</span> は青、<span class="mono">eruption</span> は赤、<span class="mono">report</span> は黒に色分けし、重ね合わせて表示せよ。重なり具合を知るために、各色は半透明にせよ。</li>
+        <li>ヒストグラムの棒の幅を1に設定し、x軸の軸名を <span class="mono">Hz</span> とせよ。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>S2 &lt;- ggplot(data = report_data) +
+  geom_histogram(aes(x = normal), boundary = 0, binwidth = 1,
+                 color = rgb(0, 0, 1), fill = rgb(0, 0, 1, alpha = 0.2)) +
+  geom_histogram(aes(x = eruption), boundary = 0, binwidth = 1,
+                 color = rgb(1, 0, 0), fill = rgb(1, 0, 0, alpha = 0.2)) +
+  geom_histogram(aes(x = report), boundary = 0, binwidth = 1,
+                 color = rgb(0, 0, 0), fill = rgb(0, 0, 0, alpha = 0.4)) +
+  xlab(<span class="s">"Hz"</span>)
+print(S2)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s2-hist.png" alt="3系列の重ね合わせヒストグラム。黒(観測)は赤(火山性)と同じ低周波帯に重なる" width="960" height="960" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── 黒(今回の観測)の分布は赤(火山性)とほぼ同じ 5〜13Hz 帯に重なり、青(非火山性)の 20〜40Hz 帯とは明確に分離。つまり<b>火山性地震</b>と判断できる、というシナリオの伏線になっています。<span class="mono">rgb()</span> の <span class="mono">alpha</span> で塗りだけ半透明にし、輪郭は不透明のままにするのが見やすさのコツ。</div>
+    </div></details>
+  </div>
+
+  <!-- S3 -->
+  <div class="viz" id="s3" style="--vc:#C0472B">
+    <div class="viz-head">
+      <span class="vno">シナリオ 3</span>
+      <div><h3>生存者と熱源 — レイヤーの重ね合わせ</h3><p class="vars">使用する変数:<span class="mono">survivor</span>, <span class="mono">elev_layer</span>, <span class="mono">heat_map</span>, <span class="mono">rescue_point</span></p></div>
+    </div>
+    <p class="story">火山性の地震と判断され、直に警報が発せられた。その後、実際に噴火が起こり、各地に被害をもたらした。噴火した山においては、7名の登山客が登山中であり、シェルターに一時退避していた。噴火は一旦沈静化したものの、今後さらに大きな噴火が起こることが予想されており、これらの生存者に対して、急ぎ救難活動が開始された。</p>
+    <p class="story">生存者一行は下山を開始し迷走を見せつつも、麓へと移動しており、断続的に携帯電話を介して GPS 位置情報が報告されている。この GPS 位置情報は <span class="mono">survivor</span> に保存されている。</p>
+    <div class="datadesc">x: 水平x軸位置座標（m）,  y: 水平y軸位置座標（m）,<br>z: 鉛直z軸位置座標（m）,  t: データ取得時刻</div>
+    <p class="story">また、当該山地のおおまかな地形情報が、等高線マップの ggplot レイヤーとして <span class="mono">elev_layer[[1]]</span> に保存されている(リストの1番目の要素を使う)。</p>
+    <div class="cb"><div class="cb-head"><span class="cb-lang">R · 等高線レイヤーの確認</span><button class="cb-copy">COPY</button></div><pre><code>ggplot() + elev_layer[[1]] + coord_fixed()</code></pre></div>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s3-contour.png" alt="与えられた等高線マップ" width="800" height="800" loading="lazy" style="max-width:420px"></div>
+    <p class="story">さらに、人工衛星の赤外線撮影により当該地域の最新の熱分布情報 <span class="mono">heat_map</span>(x, y, z=温度℃)が得られている。これらの情報をもとに策定された救助予定地点が <span class="mono">rescue_point</span> に保存されている。</p>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li>等高線マップの背景に熱源分布をヒートマップの形で重ね合わせよ。</li>
+        <li>描いたヒートマップについて、低温ほど赤く、高温ほど白くなるように設定せよ。</li>
+        <li>続けて、生存者の GPS 位置 <span class="mono">survivor</span> を線で繋ぎ移動経路を可視化して、重ね合わせよ。</li>
+        <li>続けて、救助地点 <span class="mono">rescue_point</span> を点でプロットし図に追加せよ。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>S3 &lt;- ggplot() +
+  geom_tile(aes(x = x, y = y, fill = z), data = heat_map, alpha = 0.9) +
+  scale_fill_gradient(low = <span class="s">"red"</span>, high = <span class="s">"white"</span>) +
+  elev_layer[[1]] + coord_fixed() +
+  geom_path(data = survivor, aes(x = x, y = y)) +
+  annotate(<span class="s">"point"</span>, x = rescue_point$x, y = rescue_point$y)
+print(S3)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s3-heat.png" alt="熱分布ヒートマップに等高線・移動経路・救助地点を重ねた図" width="960" height="960" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── 山頂(等高線の中心)が白=高温で、まさに噴火の熱源。生存者の経路(黒線)は高温域を避けて西へ下山しており、その先の低温域(赤)に救助地点(黒点)が置かれています。<span class="mono">geom_path()</span> は<b>データの行順</b>に線を繋ぐのがポイント(<span class="mono">geom_line()</span> だと x 順に並べ替えられてしまい経路になりません)。</div>
+    </div></details>
+  </div>
+
+  <!-- S4 -->
+  <div class="viz" id="s4" style="--vc:#3B3E9E">
+    <div class="viz-head">
+      <span class="vno">シナリオ 4</span>
+      <div><h3>救難ヘリの操縦支援 — rgl による3D地形表示</h3><p class="vars">使用する変数:<span class="mono">mt.x</span>, <span class="mono">mt.y</span>, <span class="mono">mt.z</span>, <span class="mono">survivor</span>, <span class="mono">rescue_point</span> / 使用パッケージ:rgl</p></div>
+    </div>
+    <p class="story">救難活動はヘリコプターを中心として実行されることとなった。救難ヘリに先行して、現場上空に捜索機が到着し、詳細な地形情報の収集がなされた。地形情報は水平x軸座標が <span class="mono">mt.x</span>、水平y軸座標が <span class="mono">mt.y</span>、鉛直z軸座標が <span class="mono">mt.z</span> に保存されている。この地形情報を三次元マップにし、さらに生存者の位置などの情報を統合して可視化し、後に続く救難ヘリのディスプレイに表示してパイロットを補助する。夜間飛行中であることを踏まえ、<b>パイロットの目への負担の少ないレイアウト</b>にする。</p>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li>地形情報 <span class="mono">mt.x</span>, <span class="mono">mt.y</span>, <span class="mono">mt.z</span> の座標に対して、<span class="mono">persp3d</span> 関数を用いて立体表示せよ。その際、寸法間隔を合わせるために、続けて <span class="mono">par3d(scale = c(1, 1, 1))</span> を実行せよ。</li>
+        <li>背景色を黒にせよ。</li>
+        <li>1. にて立体表示した地形情報について、立体をワイヤーフレームの形で描け。ワイヤーフレームの色については、背景が黒でも明瞭に読み取れる色を使用せよ。</li>
+        <li>続けて、生存者の3次元 GPS 位置 <span class="mono">survivor</span> を線で繋ぎ移動経路を可視化して、重ね合わせよ。背景が黒でも明瞭に読み取れる色を使用せよ。</li>
+        <li>さらに、生存者の3次元 GPS 位置については、線だけでなく各データ地点に点もプロットし、かつ付近に <span class="mono">survivor$t</span> にあるデータ取得時刻の情報をテキストで追加せよ。背景に対して明瞭に読み取れる色を使用せよ。</li>
+        <li>救助予定地点 <span class="mono">rescue_point</span> を点でプロットし、かつ同位置にテキストで <span class="mono">"LZ ETA 04:30"</span> と追加せよ。背景に対して明瞭に読み取れる色を使用せよ。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>open3d()
+persp3d(mt.x, mt.y, as.vector(mt.z), col = hsv(0.5, 0.5, 1), alpha = 0.4,
+        front = <span class="s">"lines"</span>, back = <span class="s">"lines"</span>,   <span class="cm"># ワイヤーフレーム表示</span>
+        lit = FALSE, axes = FALSE, xlab = <span class="s">""</span>, ylab = <span class="s">""</span>, zlab = <span class="s">""</span>)
+par3d(scale = c(1, 1, 1))
+bg3d(sphere = FALSE, fogtype = <span class="s">"none"</span>, color = c(<span class="s">"black"</span>, <span class="s">"white"</span>),
+     back = <span class="s">"lines"</span>, fogScale = 1)
+
+<span class="cm"># 生存者の経路（点＋線＋時刻テキスト）</span>
+points3d(survivor$x, survivor$y, survivor$z, size = 10, col = <span class="s">"pink"</span>)
+lines3d(survivor$x, survivor$y, survivor$z, col = <span class="s">"pink"</span>)
+texts3d(survivor$x, survivor$y, survivor$z + 100, texts = survivor$t,
+        col = <span class="s">"white"</span>, alpha = 0.9)
+
+<span class="cm"># 救助予定地点（rescue_point$t に "LZ ETA 04:30" が格納済み）</span>
+points3d(rescue_point$x, rescue_point$y, rescue_point$z,
+         size = 20, col = <span class="s">"orange"</span>, alpha = 0.9)
+texts3d(rescue_point$x, rescue_point$y + 10, rescue_point$z + 100,
+        texts = rescue_point$t, col = <span class="s">"white"</span>, alpha = 0.9)
+
+<span class="cm"># 視点の調整（マウスでも回せる）</span>
+view3d(theta = 0, phi = -70, zoom = 0.3, scale = par3d(<span class="s">"scale"</span>), interactive = TRUE)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · rgl ウィンドウ(スナップショット)</span></div><img src="img/exam-s4-3d.png" alt="黒背景にシアンのワイヤーフレーム地形、ピンクの経路と時刻、オレンジの救助地点" width="1120" height="760" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── 黒背景+ワイヤーフレームは夜間コックピットの定番配色(輝度を絞って暗順応を守る)。生存者は 15:33 の山頂付近から一晩かけて西斜面を下り、02:01 の最終報告位置の先、下山方向の延長線上に着陸予定地点(LZ)が設定されています。点が円ではなく四角で描かれることがありますが、rgl の仕様なので気にしなくて構いません。図を保存するには <span class="mono">rgl.snapshot("s4.png")</span>。</div>
+    </div></details>
+  </div>
+
+  <!-- S5 -->
+  <div class="viz" id="s5" style="--vc:#4C7A34">
+    <div class="viz-head">
+      <span class="vno">シナリオ 5</span>
+      <div><h3>赤外線画像のアノテーション — ROI と検出枠</h3><p class="vars">使用する変数:<span class="mono">pic_all</span>, <span class="mono">roi_pt</span>, <span class="mono">pic_zoom</span>, <span class="mono">tracked_tgt</span></p></div>
+    </div>
+    <p class="story"><b>〈シナリオ A〉</b> 救難ヘリが現場に近づき、赤外線監視装置で捜索が開始された。赤外線監視装置による広域画像に適切なアノテーションを施し、捜索員による捜索作業を補助する。当該画像は <span class="mono">pic_all</span> に保存されている(ggplot オブジェクトなので、そのまま実行すると表示され、レイヤーを <span class="mono">+</span> で追加できる)。</p>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">与えられた画像 · pic_all</span></div><img src="img/exam-s5-picall.png" alt="赤外線広域画像" width="960" height="800" loading="lazy"></div>
+    <p class="story">この広域画像において、生存者の GPS 座標をもとにスキャン範囲を絞ることとした。ズーム範囲は<b>矩形の対角2点</b>の画像中座標として与えられ、<span class="mono">roi_pt</span>(2行×2列:1行目が左下、2行目が右上)に保存されている。</p>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li><span class="mono">roi_pt</span> をもとに矩形の輪郭を <span class="mono">pic_all</span> の画像中に描け。色は緑とする。</li>
+        <li>続けて、描いた矩形輪郭の直上に <span class="mono">ROI</span>(意味:Region Of Interest)と文字を表示せよ。色は緑とする。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く(シナリオ A)</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>roi &lt;- annotate(<span class="s">"rect"</span>,
+                xmin = roi_pt$x[1], ymin = roi_pt$y[1],
+                xmax = roi_pt$x[2], ymax = roi_pt$y[2],
+                col = <span class="s">"green"</span>, fill = NA)
+tx &lt;- annotate(<span class="s">"text"</span>, x = roi_pt$x[1], y = roi_pt$y[1] + 60,
+               col = <span class="s">"green"</span>, label = <span class="s">"ROI"</span>)
+S5A &lt;- pic_all + roi + tx + labs(x = NULL, y = NULL)
+print(S5A)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s5a-roi.png" alt="広域画像に緑のROI矩形とラベルを重ねた図" width="960" height="800" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── <span class="mono">annotate("rect")</span> は対角2点(xmin/ymin と xmax/ymax)だけで矩形を描けます。<span class="mono">geom_rect()</span> や <span class="mono">geom_segment()</span> で4辺を描いても正答。<span class="mono">fill = NA</span> にしないと塗りつぶされて下の画像が見えなくなる点に注意。</div>
+    </div></details>
+    <p class="story" style="margin-top:18px"><b>〈シナリオ B〉</b> ズームした画像が得られ、<span class="mono">pic_zoom</span> に保存されている。この画像にて、識別器によって生存者が検出され、座標値(u, v)と ID が <span class="mono">tracked_tgt</span>(7行)に保存されている。</p>
+    <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">与えられた画像 · pic_zoom</span></div><img src="img/exam-s5-piczoom.png" alt="赤外線ズーム画像" width="960" height="800" loading="lazy"></div>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li value="3">ズームした画像座標値をもとに、生存者一人一人を囲むように正方形の輪郭を重ね合わせよ。色は緑とする。</li>
+        <li>各正方形の付近に ID 番号(1〜7)を表示させよ。色は緑とする。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く(シナリオ B)</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>box &lt;- geom_rect(data = tracked_tgt,
+                 aes(xmin = u - 30, ymin = v - 30,
+                     xmax = u + 30, ymax = v + 30),
+                 col = rgb(0, 1, 0, alpha = 0.7), fill = NA)
+id &lt;- geom_text(data = tracked_tgt, aes(x = u - 50, y = v + 50),
+                label = tracked_tgt$id, col = rgb(0, 1, 0, alpha = 0.7))
+S5B &lt;- pic_zoom + box + id + labs(x = NULL, y = NULL)
+print(S5B)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s5b-id.png" alt="ズーム画像に7人分の緑の検出枠とID番号を重ねた図" width="960" height="800" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── こちらは7個の枠を描くので、<span class="mono">annotate()</span> ではなくデータフレームを渡せる <span class="mono">geom_rect()</span> を使うのが素直。中心座標 ±30 で一辺60ピクセルの正方形になります。物体検出結果のバウンディングボックス描画と同じ発想です。</div>
+    </div></details>
+  </div>
+
+  <!-- S6 -->
+  <div class="viz" id="s6" style="--vc:#8E3B5E">
+    <div class="viz-head">
+      <span class="vno">シナリオ 6</span>
+      <div><h3>心電図モニタの復旧 — ダークテーマの折れ線</h3><p class="vars">使用する変数:<span class="mono">ecg_data</span></p></div>
+    </div>
+    <p class="story">救助ヘリで移動中に、救助された生存者のうち1名の容体が悪化した。さらに火山による磁気障害によって、救難ヘリ内の心電図のディスプレイが正しく映像を映せなくなった。心電図の数値情報は正しく得られており、<span class="mono">ecg_data</span>(sec, mV)に保存されている。そこで、急ぎこの情報をもとに心電図を作成する。</p>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li><span class="mono">ecg_data$sec</span> を横軸、<span class="mono">ecg_data$mV</span> を縦軸として、データを折れ線で繋ぎ図を作成せよ。</li>
+        <li>夜間飛行中であることを鑑みて背景を黒に設定し、その上で心電図がよく見えるように線などの配色を調整せよ。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code>bgcolor   &lt;- <span class="s">"black"</span>
+linecolor &lt;- hsv(0.5, 1, 1, alpha = 0.5)   <span class="cm"># シアン系</span>
+gridcolor &lt;- hsv(0, 0, 1, alpha = 0.2)     <span class="cm"># 薄い白</span>
+
+S6 &lt;- ggplot() +
+  geom_line(data = ecg_data, aes(x = sec, y = mV), col = linecolor) +
+  theme(
+    text             = element_text(color = <span class="s">"white"</span>),
+    plot.background  = element_rect(colour = bgcolor, fill = bgcolor),
+    panel.background = element_rect(colour = bgcolor, fill = bgcolor),
+    panel.grid.major = element_line(colour = gridcolor),
+    panel.grid.minor = element_line(colour = gridcolor),
+    axis.text        = element_text(colour = <span class="s">"white"</span>)
+  )
+print(S6)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s6-ecg.png" alt="黒背景にシアンの心電図波形" width="1120" height="720" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── ggplot のテーマは <span class="mono">theme()</span> で部品ごとに上書きできます。背景(plot / panel)・グリッド・軸文字をそれぞれ暗色系に揃えるのが要点。約1.35秒間隔で QRS 波が出ており、心拍数はおよそ44bpm — 容体悪化(徐脈)を示す演出データです。</div>
+    </div></details>
+  </div>
+
+  <!-- S7 -->
+  <div class="viz" id="s7" style="--vc:#B07A18">
+    <div class="viz-head">
+      <span class="vno">シナリオ 7</span>
+      <div><h3>搬送先の選定 — 積み上げ棒グラフ</h3><p class="vars">使用する変数:<span class="mono">hospital_data</span></p></div>
+    </div>
+    <p class="story">容体の悪化した生存者について急ぎ病院へ搬送する必要が生じた。病院データ共有システムから、近郊でのヘリコプター着陸が可能な病院一覧およびそこでの患者受け入れ状況が得られ、<span class="mono">hospital_data</span> に保存されている。</p>
+    <div class="datadesc">name:   病院名,<br>status: 空き病床 / 使用中の属性（available / in_use）,<br>number: 各属性の病床数</div>
+    <div class="qs"><p class="qtitle">■ 設問</p>
+      <ol class="steps">
+        <li>病院ごとに available と in_use の数を積み上げ棒グラフにして並べよ。</li>
+        <li>積み上げ棒グラフの available の箇所を青、in_use の箇所を灰色にせよ。</li>
+        <li>講義内容を振り返り、見やすくなるように調整せよ。</li>
+      </ol>
+    </div>
+    <details class="ans"><summary>解答例を開く(基本)</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 設問3の指針：可読性を高める処理があれば加点。</span>
+<span class="cm"># 例：病院名を縦軸側に回すと読みやすい → coord_flip()</span>
+S7 &lt;- ggplot() +
+  geom_bar(stat = <span class="s">"identity"</span>,
+           aes(x = name, fill = status, y = number),
+           data = hospital_data) +
+  scale_fill_manual(values = c(available = <span class="s">"blue"</span>, in_use = <span class="s">"gray"</span>)) +
+  xlab(<span class="s">"Hospitals"</span>) + ylab(<span class="s">"num. of beds"</span>) +
+  coord_flip()
+print(S7)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s7-bar.png" alt="病院別の積み上げ棒グラフ。availableが青、in_useが灰色" width="960" height="800" loading="lazy"></div>
+      <div class="note"><b>ポイント</b> ── 色は <span class="mono">values = c(available = "blue", in_use = "gray")</span> のように<b>水準名で明示</b>して割り当てるのが安全(位置指定だと factor の水準順に依存して入れ替わることがある)。</div>
+    </div></details>
+    <details class="ans"><summary>解答例を開く(発展:ソートして意思決定を速くする)</summary><div class="inner">
+      <div class="cb"><div class="cb-head"><span class="cb-lang">R · 解答例(発展)</span><button class="cb-copy">COPY</button></div><pre><code><span class="cm"># 文脈上知りたいのは「空き病床の多い病院」。空き数順に並べ替え、</span>
+<span class="cm"># 最多の病院を最下部（数値目盛り側）に置いて読み取りやすくする。</span>
+wide_data &lt;- hospital_data %&gt;%
+  pivot_wider(names_from = <span class="s">"status"</span>, values_from = <span class="s">"number"</span>)
+
+sorted_data &lt;- wide_data[order(wide_data$available, decreasing = TRUE), ]
+hospital_data$name &lt;- factor(hospital_data$name, levels = sorted_data$name)
+
+S7_advanced &lt;- ggplot() +
+  geom_bar(stat = <span class="s">"identity"</span>,
+           aes(x = name, fill = status, y = number),
+           data = hospital_data) +
+  scale_fill_manual(values = c(available = <span class="s">"blue"</span>, in_use = <span class="s">"gray"</span>)) +
+  xlab(<span class="s">"Hospitals"</span>) + ylab(<span class="s">"num. of beds"</span>) +
+  coord_flip()
+print(S7_advanced)</code></pre></div>
+      <div class="ob"><div class="ob-head"><span class="ob-dot"></span><span class="ob-lang">OUTPUT · Plots ペイン</span></div><img src="img/exam-s7-bar-sorted.png" alt="空き病床数順にソートした積み上げ棒グラフ" width="960" height="800" loading="lazy"></div>
+      <div class="note"><b>読み方</b> ── 空き病床が最も多い USMC EH(青が最長)が最下部に来て、ひと目で搬送先候補と分かります。「どう並べるか」も可視化の設計の一部、というのがこの設問の狙いです。</div>
+    </div></details>
+  </div>
+
+  <div class="card spine" id="fixes" style="border-left-color:var(--warn)">
+    <div class="card-body">
+      <h3>原本(試験実施時)からの修正点</h3>
+      <p class="sub">試験後に赤字で補足されていた不備を、このページでは本文に反映済み</p>
+      <ol class="steps" style="--vc:var(--warn)">
+        <li><b>シナリオ3</b> ── 原本の <span class="mono">elev_layer[[2]]</span>(テキスト描画レイヤー)は一部の環境で描画エラーになるため、当時は採点対象外とされた。本ページでは最初から <span class="mono">elev_layer[[1]]</span> のみを使う問題文に統一。</li>
+        <li><b>シナリオ5</b> ── 原本では <span class="mono">roi_pt</span> を「画像中の座標値4点」と記していたが、実データは<b>矩形の対角2点</b>(2行×2列)。当時は矩形を描ける関数を使っていれば一律正答とされた。本ページでは「対角2点(1行目が左下、2行目が右上)」に訂正。</li>
+        <li><b>シナリオ1</b> ── 試験当時に配布した Google API キーは公開ページには掲載できないため削除し、各自のキーを使う形に変更(キーなしでも設問2・3は練習可能)。</li>
+        <li><b>シナリオ7</b> ── 解答例の色指定を位置指定(<span class="mono">values = c("gray","blue")</span>)から水準名の明示指定に変更。出力は同じだが、factor の水準順に依存しない頑健な書き方に改めた。</li>
+      </ol>
+    </div>
+  </div>
+
+    <p class="foot">
+    このページの出力はすべて R 4.4.1 で実際に実行して得たものです。基礎から始めるなら<a href="rstudio-visualization-sample.html">可視化サンプル(airquality)</a>、環境構築は <a href="rstudio-setup.html">RStudio 導入</a>へ。他の資料へは <a href="index.html">資料一覧</a> から移動できます。
+  </p>
+
+</div>
+
+<script>
+  document.querySelectorAll('.cb-copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.closest('.cb').querySelector('pre');
+      navigator.clipboard.writeText(pre.innerText).then(function(){
+        var prev = btn.textContent; btn.textContent = 'COPIED'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = prev; btn.classList.remove('done'); }, 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>
