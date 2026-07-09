@@ -50,6 +50,18 @@
   .svgwrap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:0 0 24px;}
   .svgwrap svg{width:100%;height:auto;display:block;}
 
+  /* comparison table */
+  .tbl-scroll{overflow-x:auto;}
+  .cmp{width:100%;border-collapse:collapse;margin:4px 0 0;font-size:13.5px;}
+  .cmp th,.cmp td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .cmp thead th{font-family:var(--display);font-size:12.5px;color:var(--muted);font-weight:700;border-bottom:2px solid var(--line);}
+  .cmp thead th.py{color:var(--py);}
+  .cmp thead th.cpp{color:var(--cpp);}
+  .cmp tbody th{font-weight:700;font-size:13px;white-space:nowrap;}
+  .yes{color:#1E7D5A;font-weight:700;}
+  .mid{color:#B07A18;font-weight:700;}
+  .no{color:#B4442B;font-weight:700;}
+
   /* language choice cards */
   .choice{display:block;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:var(--radius);padding:22px 24px;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;}
   a.choice:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(19,26,43,.10);border-bottom-color:var(--line);}
@@ -191,6 +203,38 @@
       <p>macOS は Homebrew + 1行コンパイル、Windows は vcpkg + CMake。オーバーヘッドが最小で、産業用カメラ SDK やリアルタイム処理への発展はこちらが本線。</p>
       <span class="go">C++ 構築ページへ →</span>
     </a>
+  </div>
+
+  <div class="card spine">
+    <div class="card-body">
+      <h3>良し悪しと選択の基準</h3>
+      <p class="sub">この用途(カメラ取り込み+GL描画)での比較</p>
+      <div class="tbl-scroll">
+        <table class="cmp">
+          <thead>
+            <tr><th>観点</th><th class="py">Python</th><th class="cpp">C++</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>導入・試行錯誤の速さ</th>
+              <td><span class="yes">◎</span> pip だけで数分。書き直しも即実行</td>
+              <td><span class="no">△</span> ライブラリ導入とビルドの手間がある</td></tr>
+            <tr><th>実行速度・遅延の制御</th>
+              <td><span class="mid">○</span> 重い処理は OpenCV/GL の C++ 側で走るため実用上は十分速い。ただし Python 層のオーバーヘッドと GIL が上限になる</td>
+              <td><span class="yes">◎</span> ネイティブ実行。ミリ秒単位の遅延・ジッタ管理までやるならこちら</td></tr>
+            <tr><th>解析との接続</th>
+              <td><span class="yes">◎</span> NumPy / pandas / matplotlib にそのまま流せる</td>
+              <td><span class="no">△</span> 解析エコシステムは手薄。別途書き出して Python/R で解析することになりがち</td></tr>
+            <tr><th>カメラ SDK・機器制御</th>
+              <td><span class="no">△</span> ベンダーの Python 対応次第</td>
+              <td><span class="yes">◎</span> 産業用カメラ(FLIR / Basler 等)の SDK はほぼ C++ 前提</td></tr>
+            <tr><th>配布・長期運用</th>
+              <td><span class="mid">○</span> 環境は venv で再現するが、実行には Python 環境が要る</td>
+              <td><span class="yes">◎</span> 単体の実行ファイルにでき、計測装置への組み込みや長時間安定稼働に向く</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><b>判断の目安</b> ── <b>撮った映像をすぐ解析に回したい・試行錯誤が中心なら Python</b>。<b>産業用カメラの SDK を使う・遅延をミリ秒で管理する・装置に組み込んで長時間回すなら C++</b>。迷ったら Python で検証して、性能や機材の要件が出た時点で C++ に移るのが低リスクです。両サンプルは同じ設計・同じ引数体系なので、移植のときも読み替えるだけで済みます。</div>
+    </div>
   </div>
 
   <!-- ===== PART 3 ===== -->
