@@ -10,9 +10,6 @@
 //   macOS : brew install opencv glfw pkg-config
 //           clang++ -std=c++17 -O2 capture_gl.cpp -o capture_gl \
 //             $(pkg-config --cflags --libs opencv4 glfw3) -framework OpenGL
-//   Linux : sudo apt install libopencv-dev libglfw3-dev
-//           g++ -std=c++17 -O2 capture_gl.cpp -o capture_gl \
-//             $(pkg-config --cflags --libs opencv4 glfw3) -lGL
 //   Windows: 同梱の CMakeLists.txt + vcpkg を使用(解説ページ参照)
 //
 // 使い方:
