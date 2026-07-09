@@ -69,6 +69,10 @@
   ol.steps > li:first-child{border-top:none;}
   ol.steps > li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:11px;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent,var(--primary));line-height:1.78;}
   ol.steps b{font-weight:700;}
+  /* 分岐ステップ(mac/win)の手動番号 */
+  ol.steps.wide > li{padding-left:78px;}
+  ol.steps > li[data-no]{counter-increment:none;}
+  ol.steps > li[data-no]::before{content:attr(data-no);}
 
   .kbd{font-family:var(--mono);font-size:12px;background:#EEF1F7;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;white-space:nowrap;}
 
@@ -327,13 +331,13 @@
       <div class="card-body">
         <h3>C++</h3>
         <p class="sub">コンパイラ+拡張機能</p>
-        <ol class="steps" style="--accent:#5C7CFA">
-          <li>拡張機能 <b>「C/C++」</b>(Microsoft 製)を入れる。
+        <ol class="steps wide" style="--accent:#5C7CFA">
+          <li data-no="01">拡張機能 <b>「C/C++」</b>(Microsoft 製)を入れる。
             <span class="chip"><code>ext install ms-vscode.cpptools</code><button data-copy="ext install ms-vscode.cpptools">COPY</button></span></li>
-          <li><b>macOS</b>:コマンドラインツール(clang++)を入れる。
+          <li data-no="02-mac"><b>macOS の場合</b>:コマンドラインツール(clang++)を入れる。
             <span class="chip"><code>xcode-select --install</code><button data-copy="xcode-select --install">COPY</button></span></li>
-          <li><b>Windows</b>:<a href="https://visualstudio.microsoft.com/ja/downloads/" target="_blank" rel="noopener">Visual Studio 2022 Build Tools</a> をインストールし、<b>「C++ によるデスクトップ開発」</b>ワークロードを選ぶ(MSVC コンパイラと CMake が入る)。</li>
-          <li>確認:ターミナルで <span class="mono">clang++ --version</span>(Mac)/ <span class="mono">cl</span>(Windows は「Developer PowerShell for VS 2022」で)。バージョンが表示されればOK。</li>
+          <li data-no="02-win"><b>Windows の場合</b>:<a href="https://visualstudio.microsoft.com/ja/downloads/" target="_blank" rel="noopener">Visual Studio 2022 Build Tools</a> をインストールし、<b>「C++ によるデスクトップ開発」</b>ワークロードを選ぶ(MSVC コンパイラと CMake が入る)。</li>
+          <li data-no="03">確認:ターミナルで <span class="mono">clang++ --version</span>(Mac)/ <span class="mono">cl</span>(Windows は「Developer PowerShell for VS 2022」で)。バージョンが表示されればOK。</li>
         </ol>
         <div class="note" style="--accent:#5C7CFA"><b>ライブラリ管理</b> ── OpenCV などのライブラリは Mac は Homebrew、Windows は vcpkg で入れるのがラボの標準。手順は各プロジェクトの資料側に記載します。</div>
       </div>
