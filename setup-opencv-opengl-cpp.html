@@ -93,11 +93,9 @@
   <div class="card">
     <div class="card-body">
       <h3>共通の準備</h3>
-      <p class="sub">拡張機能とサンプルファイル</p>
+      <p class="sub">サンプルファイルの配置</p>
+      <div class="note" style="margin:0 0 4px"><b>前提</b> ── C++ の言語環境(コンパイラと「C/C++」拡張。Mac は <span class="mono">xcode-select --install</span>、Windows は VS 2022 Build Tools)は <a href="setup-vscode-ai.html#p3">VS Code 導入・AI連携の PART 03</a> で整えてある前提です。まだの人は先にそちらを済ませてください。</div>
       <ol class="steps">
-        <li>拡張機能ビュー <span class="kbd">⇧⌘X</span> / <span class="kbd">Ctrl+Shift+X</span> で <b>「C/C++」</b>(Microsoft 製)を入れる。
-          <div class="cb"><div class="cb-head"><span class="cb-lang">コマンドパレットからでも可</span><button class="cb-copy">COPY</button></div><pre><code>ext install ms-vscode.cpptools</code></pre></div>
-        </li>
         <li>作業フォルダ(例:<span class="mono">capture-gl</span>)を作って VS Code で開き、<a href="code/capture_gl.cpp" download>capture_gl.cpp</a> を置く(Windows は <a href="code/CMakeLists.txt" download>CMakeLists.txt</a> も)。</li>
         <li>以降のコマンドは VS Code の統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> で実行する。</li>
       </ol>
@@ -110,9 +108,6 @@
         <h3>macOS</h3>
         <p class="sub">Homebrew + clang++ の1行コンパイル</p>
         <ol class="steps">
-          <li>コンパイラ(clang++)が無ければコマンドラインツールを入れる。
-            <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>xcode-select --install</code></pre></div>
-          </li>
           <li>ライブラリを Homebrew で入れる。
             <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>brew install opencv glfw pkg-config</code></pre></div>
           </li>
@@ -134,7 +129,6 @@
         <h3>Windows</h3>
         <p class="sub">vcpkg + CMake(コンパイラは VS 2022 Build Tools)</p>
         <ol class="steps">
-          <li><a href="https://visualstudio.microsoft.com/ja/downloads/" target="_blank" rel="noopener">Visual Studio 2022 Build Tools</a> をインストールし、<b>「C++ によるデスクトップ開発」</b>ワークロードを選ぶ(MSVC コンパイラが入る)。</li>
           <li>vcpkg を導入してライブラリを入れる(OpenCV のビルドに数十分かかる)。
             <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル(PowerShell)</span><button class="cb-copy">COPY</button></div><pre><code>git clone https://github.com/microsoft/vcpkg
 .\vcpkg\bootstrap-vcpkg.bat

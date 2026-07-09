@@ -169,6 +169,7 @@
   <nav class="toc">
     <a href="#p1">01 VS Code を入れる</a>
     <a href="#p2">02 AI を連携する</a>
+    <a href="#p3">03 言語環境を整える</a>
     <a href="index.html">← 資料一覧</a>
   </nav>
 
@@ -301,6 +302,43 @@
   </div>
 
   <div class="note" style="--accent:var(--primary)"><b>判断の目安</b> ── 「<b>自分で書く隣に Copilot、まるごと任せるなら Cline</b>」。無料枠の面でも、常時の補完は Copilot(月2,000補完/50チャット)、重いタスクは Cline(Gemini 無料 API のレート制限内)と分けると上限に当たりにくい。迷ったら、書き始めは Copilot、詰まって「全体を任せたい」と思ったら Cline に渡す、で回せます。</div>
+
+  <!-- ================= PART 3 : LANGUAGES ================= -->
+  <div class="part" id="p3"><span class="no">PART 03</span><h2>言語環境を整える(Python / C++)</h2><span class="rule"></span></div>
+  <p class="lede" style="margin-top:-8px">研究でよく使う2言語のベース環境です。ここまで済ませておくと、各プロジェクトの資料(<a href="setup-opencv-opengl.html">OpenCV + OpenGL</a> など)では「ライブラリを入れて動かす」ところから始められます。コマンドはすべて VS Code の統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> で実行します。</p>
+
+  <div class="cols">
+    <div class="card spine" style="--accent:#B07A18">
+      <div class="card-body">
+        <h3>Python</h3>
+        <p class="sub">プロジェクトごとに venv を切る</p>
+        <ol class="steps" style="--accent:#B07A18">
+          <li>拡張機能 <b>「Python」</b>(Microsoft 製)を入れる(PART 01 の初期設定で導入済みならスキップ)。</li>
+          <li>作業フォルダを VS Code で開き、統合ターミナルで仮想環境を作る。
+            <span class="chip"><code>python3 -m venv .venv</code><button data-copy="python3 -m venv .venv">COPY</button></span>
+            <p class="chip-label">Windows は <span class="mono">py -m venv .venv</span></p></li>
+          <li>コマンドパレット <span class="kbd">⇧⌘P</span> / <span class="kbd">Ctrl+Shift+P</span> → <b>「Python: Select Interpreter」</b> → <span class="mono">.venv</span> を選ぶ。以後、開いたターミナルは自動で venv に入る(プロンプト先頭の <span class="mono">(.venv)</span> が目印)。</li>
+          <li>パッケージは venv に入った状態で <span class="mono">pip install …</span>。何を入れるかは各プロジェクトの資料に従う。</li>
+        </ol>
+        <div class="note" style="--accent:#B07A18"><b>原則</b> ── グローバルの Python には pip で直接入れない。プロジェクト=フォルダ=venv を1対1にすると、環境の壊れ方が局所で済みます。</div>
+      </div>
+    </div>
+    <div class="card spine" style="--accent:#5C7CFA">
+      <div class="card-body">
+        <h3>C++</h3>
+        <p class="sub">コンパイラ+拡張機能</p>
+        <ol class="steps" style="--accent:#5C7CFA">
+          <li>拡張機能 <b>「C/C++」</b>(Microsoft 製)を入れる。
+            <span class="chip"><code>ext install ms-vscode.cpptools</code><button data-copy="ext install ms-vscode.cpptools">COPY</button></span></li>
+          <li><b>macOS</b>:コマンドラインツール(clang++)を入れる。
+            <span class="chip"><code>xcode-select --install</code><button data-copy="xcode-select --install">COPY</button></span></li>
+          <li><b>Windows</b>:<a href="https://visualstudio.microsoft.com/ja/downloads/" target="_blank" rel="noopener">Visual Studio 2022 Build Tools</a> をインストールし、<b>「C++ によるデスクトップ開発」</b>ワークロードを選ぶ(MSVC コンパイラと CMake が入る)。</li>
+          <li>確認:ターミナルで <span class="mono">clang++ --version</span>(Mac)/ <span class="mono">cl</span>(Windows は「Developer PowerShell for VS 2022」で)。バージョンが表示されればOK。</li>
+        </ol>
+        <div class="note" style="--accent:#5C7CFA"><b>ライブラリ管理</b> ── OpenCV などのライブラリは Mac は Homebrew、Windows は vcpkg で入れるのがラボの標準。手順は各プロジェクトの資料側に記載します。</div>
+      </div>
+    </div>
+  </div>
 
     <p class="foot">
     環境構築の資料はほかに <a href="rstudio-setup.html">RStudio 導入・AI連携</a> があります(本資料と同じ構成)。他の資料へは <a href="index.html">資料一覧</a> から移動できます。

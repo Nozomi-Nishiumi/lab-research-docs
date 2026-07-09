@@ -89,17 +89,12 @@
   <div class="part" id="p1"><span class="no">PART 01</span><h2>環境をつくる(VS Code)</h2><span class="rule"></span></div>
   <div class="card spine">
     <div class="card-body">
-      <h3>venv + 3パッケージ</h3>
-      <p class="sub">OpenCV(取り込み)・glfw(ウィンドウ)・PyOpenGL(描画)。VS Code の「Python」拡張(Microsoft 製)は<a href="setup-vscode-ai.html">VS Code 導入</a>で入れた前提</p>
+      <h3>3パッケージを入れる</h3>
+      <p class="sub">OpenCV(取り込み)・glfw(ウィンドウ)・PyOpenGL(描画)</p>
+      <div class="note" style="margin:0 0 4px"><b>前提</b> ── Python の言語環境(venv の作成と「Python: Select Interpreter」)は <a href="setup-vscode-ai.html#p3">VS Code 導入・AI連携の PART 03</a> で整えてある前提です。まだの人は先にそちらを済ませてください。</div>
       <ol class="steps">
-        <li>作業フォルダ(例:<span class="mono">capture-gl</span>)を作り、<b>VS Code で開く</b>(File → Open Folder、またはターミナルから <span class="kbd">code capture-gl</span>)。</li>
-        <li>統合ターミナルを開く:<span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span>。以降のコマンドはすべてここで実行する。</li>
-        <li>仮想環境を作る。
-          <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル · macOS</span><button class="cb-copy">COPY</button></div><pre><code>python3 -m venv .venv</code></pre></div>
-          <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル · Windows</span><button class="cb-copy">COPY</button></div><pre><code>py -m venv .venv</code></pre></div>
-        </li>
-        <li>VS Code に venv を認識させる:コマンドパレット <span class="kbd">⇧⌘P</span> / <span class="kbd">Ctrl+Shift+P</span> → <b>「Python: Select Interpreter」</b> → <span class="mono">.venv</span> を選ぶ。右下の通知で「新しいターミナルで有効化」される(以後、開いたターミナルは自動で venv に入る。プロンプト先頭の <span class="mono">(.venv)</span> が目印)。</li>
-        <li>ターミナルを開き直し(<span class="kbd">⌃`</span> → ゴミ箱アイコンで一度閉じてもよい)、3パッケージを入れる。
+        <li>作業フォルダ(例:<span class="mono">capture-gl</span>)を VS Code で開き、統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> を開く。プロンプト先頭に <span class="mono">(.venv)</span> が付いている(=venv が有効)ことを確認。</li>
+        <li>このプロジェクト用の3パッケージを入れる。
           <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>pip install opencv-python glfw PyOpenGL</code></pre></div>
         </li>
         <li><a href="code/capture_gl.py" download>capture_gl.py</a> をダウンロードして作業フォルダに置く(VS Code のエクスプローラーへドラッグ&ドロップでもよい)。</li>
