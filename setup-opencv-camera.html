@@ -89,15 +89,30 @@
 
   <p class="eyebrow">環境構築 · OpenCV</p>
   <h1>まず OpenCV だけで、<br>カメラを映す</h1>
-  <p class="lede">OpenCV の <span class="mono">VideoCapture</span> と <span class="mono">imshow</span> だけでカメラ映像を画面に出す、いちばん素朴な構成です。<a href="setup-opencv-opengl.html">OpenCV + OpenGL 高速カメラ描画</a>の前段として、まずこれでカメラと OpenCV の導入を確認してください。開発は <a href="setup-vscode-ai.html">VS Code</a> を前提に進めます。最後に、この方式の限界=なぜ次のページで OpenGL とスレッド分離に進むのかを確認します。</p>
+  <p class="lede">OpenCV の <span class="mono">VideoCapture</span> と <span class="mono">imshow</span> だけでカメラ映像を画面に出す、いちばん素朴な構成です。<a href="setup-opencv-opengl.html">OpenCV + OpenGL 高速カメラ描画</a>の前段として、まずこれでカメラと OpenCV の導入を確認してください。このページは<b><a href="setup-vscode-ai.html">VS Code 導入・AI連携</a>のセットアップを済ませた後の案内</b>で、作業はすべて VS Code 上(エクスプローラーと統合ターミナル)で進めます。最後に、この方式の限界=なぜ次のページで OpenGL とスレッド分離に進むのかを確認します。</p>
 
   <nav class="toc">
+    <a href="#pre">前提の確認</a>
     <a href="#p1">01 仕組み</a>
     <a href="#p2">02 Python で動かす</a>
     <a href="#p3">03 C++ で動かす</a>
     <a href="#p4">04 この方式の限界</a>
     <a href="index.html">← 資料一覧</a>
   </nav>
+
+  <!-- ===== 前提 ===== -->
+  <div class="part" id="pre"><span class="no">READY</span><h2>前提の確認 — VS Code 側で済ませておくこと</h2><span class="rule"></span></div>
+  <div class="card spine" style="--accent:var(--primary)">
+    <div class="card-body">
+      <p style="margin:0 0 10px;font-size:14.5px">以下は<a href="setup-vscode-ai.html">VS Code 導入・AI連携</a>で構築済みの前提です。1つでも未了なら、先にそちらを済ませてからこのページに戻ってください。</p>
+      <ul class="pts">
+        <li><b>VS Code 本体</b>(同ページ PART 01)── インストール済みで、フォルダを開いて統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> を出せる。</li>
+        <li><b>Python で進める人</b>(同ページ <a href="setup-vscode-ai.html#p3">PART 03</a>)── Python 拡張が入っていて、プロジェクトフォルダに venv を作り「Python: Select Interpreter」で選択できる。</li>
+        <li><b>C++ で進める人</b>(同ページ <a href="setup-vscode-ai.html#p3">PART 03</a>)── 「C/C++」拡張とコンパイラ(Mac: コマンドラインツール / Windows: VS 2022 Build Tools)が入っている。</li>
+      </ul>
+      <div class="note" style="--accent:var(--primary)"><b>このページでやること</b> ── 上記が済んでいれば、残りは「OpenCV を入れて、サンプルを置いて、実行する」だけです。</div>
+    </div>
+  </div>
 
   <!-- ===== PART 1 ===== -->
   <div class="part" id="p1"><span class="no">PART 01</span><h2>仕組み — すべてを1つのループで</h2><span class="rule"></span></div>
@@ -170,17 +185,20 @@
   <div class="card spine" style="--accent:var(--py)">
     <div class="card-body">
       <h3>opencv-python ひとつだけ</h3>
-      <p class="sub">venv は <a href="setup-vscode-ai.html#p3">VS Code 導入・AI連携の PART 03</a> で作成済みの前提</p>
+      <p class="sub">venv の作成と Interpreter 選択は済んでいる前提(<a href="#pre">前提の確認</a>)</p>
       <ol class="steps">
-        <li>作業フォルダを VS Code で開き、統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> を開く(プロンプトに <span class="mono">(.venv)</span> が付いていること)。</li>
+        <li>作業フォルダ(例:<span class="mono">opencv-camera</span>)を <b>File → Open Folder</b> で VS Code で開く。venv 未作成のフォルダなら、<a href="setup-vscode-ai.html#p3">VS Code 導入の PART 03</a> の手順で venv を作って Interpreter を選んでおく。</li>
+        <li>統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> を開き、プロンプト先頭に <span class="mono">(.venv)</span> が付いていることを確認(付いていなければターミナルを開き直す)。</li>
         <li>OpenCV を入れる。
           <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>pip install opencv-python</code></pre></div>
         </li>
-        <li><a href="code/capture_min.py" download>capture_min.py</a> をダウンロードして作業フォルダに置き、実行する。
+        <li><a href="code/capture_min.py" download>capture_min.py</a> をダウンロードし、VS Code の<b>エクスプローラー(左のファイル一覧)へドラッグ&ドロップ</b>して作業フォルダに置く。</li>
+        <li>実行する。
           <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>python capture_min.py</code></pre></div>
         </li>
         <li>カメラ映像のウィンドウが開き、左上に実測 fps が出れば成功。<span class="kbd">ESC</span> で終了。カメラを選ぶなら <span class="mono">python capture_min.py 1</span> のように番号を渡す。</li>
       </ol>
+      <div class="note"><b>エディタ右上の ▷ でも実行できる</b> ── <span class="mono">capture_min.py</span> を開いて「Run Python File」でも動きます(カメラ番号の引数を渡すときはターミナルから)。</div>
       <div class="note warn"><b>macOS のカメラ許可</b> ── 初回に「<b>Visual Studio Code がカメラにアクセスしようとしています</b>」の確認が出るので許可する。出ないまま開けない場合は <b>システム設定 → プライバシーとセキュリティ → カメラ</b> で VS Code を ON にする。</div>
       <div class="cb"><div class="cb-head"><span class="cb-lang">Python · capture_min.py(全文)</span><button class="cb-copy">COPY</button></div><pre><code>#!/usr/bin/env python3
 # ============================================================
@@ -239,7 +257,17 @@ cv2.destroyAllWindows()</code></pre></div>
 
   <!-- ===== PART 3 ===== -->
   <div class="part" id="p3"><span class="no">PART 03</span><h2>C++ で動かす</h2><span class="rule"></span></div>
-  <div class="note" style="margin:-6px 0 20px"><b>前提</b> ── コンパイラと「C/C++」拡張は <a href="setup-vscode-ai.html#p3">VS Code 導入・AI連携の PART 03</a> で導入済みとします。<a href="code/capture_min.cpp" download>capture_min.cpp</a> を作業フォルダに置き、VS Code の統合ターミナルで実行してください。</div>
+  <div class="card spine" style="--accent:var(--cpp)">
+    <div class="card-body">
+      <h3>共通の準備(VS Code)</h3>
+      <p class="sub">コンパイラと「C/C++」拡張は済んでいる前提(<a href="#pre">前提の確認</a>)</p>
+      <ol class="steps" style="--accent:var(--cpp)">
+        <li>作業フォルダ(例:<span class="mono">opencv-camera</span>)を <b>File → Open Folder</b> で VS Code で開く。</li>
+        <li><a href="code/capture_min.cpp" download>capture_min.cpp</a> をダウンロードし、VS Code の<b>エクスプローラーへドラッグ&ドロップ</b>して置く(Windows は <a href="code/CMakeLists.txt" download>CMakeLists.txt</a> も)。</li>
+        <li>以降のコマンドは統合ターミナル <span class="kbd">⌃`</span> / <span class="kbd">Ctrl+`</span> で、OS に応じて下のどちらかの列を実行する。</li>
+      </ol>
+    </div>
+  </div>
 
   <div class="cols">
     <div class="card spine" style="--accent:var(--cpp)">
@@ -248,10 +276,10 @@ cv2.destroyAllWindows()</code></pre></div>
         <p class="sub">Homebrew + 1行コンパイル(GLFW は不要)</p>
         <ol class="steps" style="--accent:var(--cpp)">
           <li>OpenCV を入れる。
-            <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>brew install opencv pkg-config</code></pre></div>
+            <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>brew install opencv pkg-config</code></pre></div>
           </li>
           <li>コンパイルする。
-            <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル · コンパイル</span><button class="cb-copy">COPY</button></div><pre><code>clang++ -std=c++17 -O2 capture_min.cpp \
+            <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル · コンパイル</span><button class="cb-copy">COPY</button></div><pre><code>clang++ -std=c++17 -O2 capture_min.cpp \
   -o capture_min \
   $(pkg-config --cflags --libs opencv4)</code></pre></div>
           </li>
@@ -265,12 +293,12 @@ cv2.destroyAllWindows()</code></pre></div>
         <p class="sub">vcpkg + CMake(GLFW は不要)</p>
         <ol class="steps" style="--accent:var(--cpp)">
           <li>vcpkg で OpenCV を入れる(初回は数十分)。
-            <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル(PowerShell)</span><button class="cb-copy">COPY</button></div><pre><code>git clone https://github.com/microsoft/vcpkg
+            <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル(PowerShell)</span><button class="cb-copy">COPY</button></div><pre><code>git clone https://github.com/microsoft/vcpkg
 .\vcpkg\bootstrap-vcpkg.bat
 .\vcpkg\vcpkg install opencv4</code></pre></div>
           </li>
           <li><a href="code/CMakeLists.txt" download>CMakeLists.txt</a> を同じフォルダに置いてビルド(フォルダにあるソースだけをビルドする作りになっている)。
-            <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル(PowerShell)· ビルド</span><button class="cb-copy">COPY</button></div><pre><code>cmake -B build ^
+            <div class="cb"><div class="cb-head"><span class="cb-lang">VS Code ターミナル(PowerShell)· ビルド</span><button class="cb-copy">COPY</button></div><pre><code>cmake -B build ^
   -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake
 cmake --build build --config Release</code></pre></div>
           </li>
