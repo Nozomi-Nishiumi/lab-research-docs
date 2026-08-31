@@ -2,6 +2,12 @@
 
 VS Code の導入・無料AI連携・3カメラによる跳躍3次元姿勢計測システムの設計と実施手順をまとめた静的サイトです。
 
+## 公開サイト
+
+**▶ https://nozomi-nishiumi.github.io/lab-research-docs/**
+
+GitHub Pages で公開中（`main` ブランチのルートから配信、`index.html` が入口）。
+
 ## 収録ファイル
 
 | ファイル | 内容 |
