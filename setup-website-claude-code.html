@@ -89,7 +89,6 @@
     <a href="#p2">02 開発の進め方</a>
     <a href="#p3">03 公開する</a>
     <a href="#p4">04 更新の運用</a>
-    <a href="#p5">05 うまく頼むコツ</a>
     <a href="index.html">← 資料一覧</a>
   </nav>
 
@@ -156,29 +155,13 @@ Google Fonts 程度・スマホでも読めるレイアウトで。締切など�
   <div class="part" id="p3"><span class="no">PART 03</span><h2>GitHub Pages で公開する</h2><span class="rule"></span></div>
   <div class="card spine">
     <div class="card-body">
-      <h3>方法A(推奨):Claude Code に丸ごと頼む</h3>
+      <h3>公開は Claude Code に丸ごと頼む</h3>
       <p class="sub">リポジトリ作成 → push → Pages 有効化 → URL 確認までを一括で</p>
       <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 公開指示の例</span><button class="cb-copy">COPY</button></div><pre>このフォルダの内容を GitHub の public リポジトリ「ccs_dx_contest」
 にプッシュして、GitHub Pages(main ブランチのルートから配信)で
 公開して。公開URLで表示されるところまで確認して。</pre></div>
       <div class="note"><b>今回のコンテストサイトの公開先</b> ── リポジトリ <a href="https://github.com/Nozomi-Nishiumi/ccs_dx_contest" target="_blank" rel="noopener">Nozomi-Nishiumi/ccs_dx_contest</a> は上記の要領で作成・設定済みで、<a href="https://nozomi-nishiumi.github.io/ccs_dx_contest/" target="_blank" rel="noopener">https://nozomi-nishiumi.github.io/ccs_dx_contest/</a> で配信されています(現在は準備中ページ)。以後はこのリポジトリに push すれば公開内容が更新されます。</div>
       <div class="note"><b>実行されること</b> ── <span class="mono">gh repo create</span> → <span class="mono">git push</span> → Pages の有効化 → ビルド完了と公開 URL(<span class="mono">https://&lt;ユーザー名&gt;.github.io/&lt;リポジトリ名&gt;/</span>)の確認。git 操作やリポジトリ作成の前には Claude Code が確認を求めてくるので、内容を見て承認する。</div>
-    </div>
-  </div>
-  <div class="card spine">
-    <div class="card-body">
-      <h3>方法B:手動でやる場合</h3>
-      <p class="sub">仕組みを把握しておきたい人向け(やることは方法Aと同じ)</p>
-      <ol class="steps">
-        <li>リポジトリを作って push する(PART 02 で Git 管理を始めていれば <span class="mono">git init</span> は不要で、最後の1行だけでよい)。
-          <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル(作業フォルダで)</span><button class="cb-copy">COPY</button></div><pre><code>git init
-git add -A
-git commit -m "initial site"
-gh repo create ccs_dx_contest --public --source=. --push</code></pre></div>
-        </li>
-        <li>GitHub のリポジトリページで <b>Settings → Pages</b> を開き、<b>Source</b> を「Deploy from a branch」、<b>Branch</b> を <span class="mono">main</span> / <span class="mono">/ (root)</span> にして Save。</li>
-        <li>数十秒〜数分で <span class="mono">https://&lt;ユーザー名&gt;.github.io/&lt;リポジトリ名&gt;/</span> に公開される(<span class="mono">index.html</span> が入口)。</li>
-      </ol>
     </div>
   </div>
   <div class="note warn" style="margin:-6px 0 26px"><b>公開前の注意(コンテスト運営では特に)</b> ── public リポジトリ+Pages は<b>ページだけでなくリポジトリの中身も全世界に公開</b>されます。API キー・パスワードはもちろん、<b>応募者の個人情報・審査資料・発表前の受賞者情報</b>は、ページにもリポジトリにも絶対に置かないこと。「結果発表ページを発表日まで下書きとしてリポジトリに置いておく」も NG です(push した時点で誰でも見られる)。発表日に作って push するか、手元のフォルダ外で下書きしておくこと。</div>
@@ -202,27 +185,8 @@ gh repo create ccs_dx_contest --public --source=. --push</code></pre></div>
     </div>
   </div>
 
-  <!-- ===== PART 5 ===== -->
-  <div class="part" id="p5"><span class="no">PART 05</span><h2>うまく頼むコツ</h2><span class="rule"></span></div>
-  <div class="card spine">
-    <div class="card-body">
-      <h3>指示の質 = 成果物の質</h3>
-      <p class="sub">この資料サイトの開発で実際に効いた頼み方</p>
-      <ul class="pts">
-        <li><b>目的と読者を最初に伝える</b> ── 「応募を検討している学生向け」「審査員向けの説明ページ」等。文章のトーンと詳しさが適切になる。</li>
-        <li><b>修正は場所を特定して</b> ── 「応募要項ページの『提出物』の2項目め」のように指すと、意図と違う場所を触られない。</li>
-        <li><b>日付・数値は一元管理を意識する</b> ── 締切・発表日・賞金額などは複数ページに散りやすい。変更時は「全ページ横断で更新して、最後に食い違いがないか確認して」まで頼む。</li>
-        <li><b>既存ページとの一貫性を求める</b> ── 「他のページと同じスタイル・構成で」と言えば、デザインや用語が揃う。</li>
-        <li><b>おかしいと思ったら指摘する</b> ── 日本語表現・レイアウト・構成の違和感は遠慮なく直させる。「〜はいらない」「2/3のサイズに」のような短い指摘で十分通じる。</li>
-        <li><b>公開タイミングを設計する</b> ── 結果発表など「その日まで見せてはいけない情報」は、push した時点で公開されると心得る。発表当日に作成→push する運用にし、それまでリポジトリに置かない。</li>
-        <li><b>秘密情報は渡さない・載せさせない</b> ── 応募者の個人情報・審査資料・API キーは常に対象外。頼む側が意識するのが最後の砦。</li>
-      </ul>
-      <div class="note"><b>実例</b> ── コンテストサイトの公開先は <a href="https://github.com/Nozomi-Nishiumi/ccs_dx_contest" target="_blank" rel="noopener">ccs_dx_contest</a>(<a href="https://nozomi-nishiumi.github.io/ccs_dx_contest/" target="_blank" rel="noopener">公開ページ</a>)。また、いま見ているこの資料サイト(<a href="https://github.com/Nozomi-Nishiumi/lab-research-docs" target="_blank" rel="noopener">lab-research-docs</a>)自体も同じ要領で「ページを作って」「◯◯を修正して」「Pages に反映して」という日本語の指示だけで開発・運用されており、コミット履歴を見ると指示と変更の対応が追えます。</div>
-    </div>
-  </div>
-
     <p class="foot">
-    実施要領の資料の1つです。エディタ環境は <a href="setup-vscode-ai.html">VS Code 導入・AI連携</a> を参照。他の資料へは <a href="index.html">資料一覧</a> から移動できます。
+    実施要領の資料の1つです。コンテスト運営メンバー向けの、既存サイトを共同で改修する要領は<a href="ccs-dx-contest-guide.html">CCS DX コンテスト実施要領</a>へ。エディタ環境は <a href="setup-vscode-ai.html">VS Code 導入・AI連携</a> を参照。他の資料へは <a href="index.html">資料一覧</a> から移動できます。
   </p>
 
 </div>
