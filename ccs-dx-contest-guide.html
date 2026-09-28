@@ -188,10 +188,11 @@ claude</code></pre></div>
 同じデザインルールで。まだ push はしないで。</pre></div>
         </li>
         <li><b>手元のブラウザで確認する</b>(<span class="mono">open index.html</span>、または「ブラウザで開いて」)。公開前に必ず自分の目で見る。</li>
-        <li><b>内容が整ったら公開する</b>。push した時点で1〜2分後に公開される。
-          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 反映指示の例</span><button class="cb-copy">COPY</button></div><pre>OK。リンク切れと日付の食い違いがないか確認したうえで、内容が
-分かる日本語のコミットメッセージでコミットして push して。
-公開URLに反映されたことも確認して。</pre></div>
+        <li><b>保存する</b>(コミット)。作業の区切りを Git の履歴として記録する。この時点ではまだ手元だけの変更で、<b>公開はされない</b>。
+          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 保存(コミット)</span><button class="cb-copy">COPY</button></div><pre>内容が分かる日本語のコミットメッセージでコミットして。</pre></div>
+        </li>
+        <li><b>公開サイトに反映する</b>(プッシュ)。push した時点で1〜2分後に公開される。
+          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 反映(プッシュ)</span><button class="cb-copy">COPY</button></div><pre>push して、公開URLに反映されたことを確認して。</pre></div>
         </li>
         <li><b>公開 URL で最終確認</b>。反映が見えないときはハードリロード(<span class="kbd">⇧⌘R</span> / <span class="kbd">Ctrl+F5</span>)、それでも古ければビルド中なので1〜2分待つ。</li>
       </ol>
