@@ -127,6 +127,12 @@
       <ol class="steps">
         <li>サイト用の<b>作業フォルダ</b>を作る(このフォルダが原本になる。クラウド同期外の場所が無難)。</li>
         <li>そのフォルダでターミナルを開き、<span class="mono">claude</span> を起動する。</li>
+        <li>本格的に作り始める前に、<b>フォルダを Git 管理にする</b>よう頼む。以後の変更がすべて履歴として記録され、「いつでも戻せる」状態で開発できる。
+          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · Git 管理の開始</span><button class="cb-copy">COPY</button></div><pre>このフォルダを git 管理にして(git init)。今後は、ページの追加や
+修正の区切りごとに、内容が分かる日本語のコミットメッセージで
+記録していって。</pre></div>
+          <p class="chip-label" style="font-size:12px;color:var(--muted);margin:10px 0 0">Git 管理にしておく利点:①失敗しても「さっきの変更を元に戻して」で直前のコミットに戻れる ②コミット履歴が「いつ・何を・なぜ変えたか」の開発記録になる ③PART 03 の公開(push)がそのままできる。</p>
+        </li>
         <li>最初の指示で、<b>サイトの目的・想定読者・ページ構成・デザインの雰囲気</b>をまとめて伝える。
           <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 最初の指示の例</span><button class="cb-copy">COPY</button></div><pre>研究室の資料サイトを作りたい。読者は配属されたばかりの学生。
 トップページ(資料一覧)と、環境構築の解説ページ2枚から始める。
@@ -138,8 +144,9 @@
         <li>修正も会話で頼む。<b>どのページの・どの箇所を・どうしたいか</b>を具体的に。
           <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 修正指示の例</span><button class="cb-copy">COPY</button></div><pre>index.html のカードの説明文が長すぎる。各カード2行以内に要約して。
 あと setup ページの手順 03 は Mac と Windows で分岐するので、
-横並び2列のレイアウトにして。</pre></div>
+横並び2列のレイアウトにして。できたらコミットしておいて。</pre></div>
         </li>
+        <li>大きく作り替えるときは、<b>直前にコミットしてから</b>着手させる(「いまの状態を一旦コミットしてから、トップページを作り直して」)。気に入らなければ「作り直す前の状態に戻して」で復元できる。</li>
       </ol>
       <div class="note"><b>構成の推奨</b> ── ページごとに独立した単一 HTML(CSS も同一ファイル内)+相対リンク、という構成にすると、ビルド工程なしで GitHub Pages にそのまま置けます。この資料サイトもその方式です。React 等のフレームワークは、必要になってからで十分。</div>
     </div>
@@ -162,7 +169,7 @@
       <h3>方法B:手動でやる場合</h3>
       <p class="sub">仕組みを把握しておきたい人向け(やることは方法Aと同じ)</p>
       <ol class="steps">
-        <li>リポジトリを作って push する。
+        <li>リポジトリを作って push する(PART 02 で Git 管理を始めていれば <span class="mono">git init</span> は不要で、最後の1行だけでよい)。
           <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル(作業フォルダで)</span><button class="cb-copy">COPY</button></div><pre><code>git init
 git add -A
 git commit -m "initial site"
