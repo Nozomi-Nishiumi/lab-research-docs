@@ -87,14 +87,13 @@
 
   <p class="eyebrow">実施要領 · CCS DX コンテスト</p>
   <h1>コンテストサイトを、<br>コラボレーターとして改修する</h1>
-  <p class="lede">CCS DX コンテストの公式サイトは、<b>すでに GitHub Pages で公開環境が動いています</b>。この要領は、改修メンバーがリポジトリの<b>コラボレーター</b>として参加し、Claude Code(<b>Claude Team for Scientists</b> のアカウント)で内容を改修・更新していくための、この企画に特化した手順書です。ゼロからサイトを作る場合の一般的な要領は<a href="setup-website-claude-code.html">別紙</a>を参照してください。</p>
+  <p class="lede">CCS DX コンテストの公式サイトは、<b>すでに GitHub Pages で公開環境が動いています</b>。この要領は、改修メンバーがリポジトリの<b>コラボレーター</b>として参加し、Claude Code で内容を改修・更新していくための、この企画に特化した手順書です。ゼロからサイトを作る場合の一般的な要領は<a href="setup-website-claude-code.html">別紙</a>を参照してください。</p>
 
   <nav class="toc">
     <a href="#p1">01 前提と体制</a>
     <a href="#p2">02 コラボレーターになる</a>
     <a href="#p3">03 手元に環境を作る</a>
     <a href="#p4">04 改修サイクル</a>
-    <a href="#p5">05 公開ルール</a>
     <a href="index.html">← 資料一覧</a>
   </nav>
 
@@ -110,12 +109,12 @@
             <tr><th>公開 URL</th><td><a href="https://nozomi-nishiumi.github.io/ccs_dx_contest/" target="_blank" rel="noopener">https://nozomi-nishiumi.github.io/ccs_dx_contest/</a></td></tr>
             <tr><th>リポジトリ</th><td><a href="https://github.com/Nozomi-Nishiumi/ccs_dx_contest" target="_blank" rel="noopener">Nozomi-Nishiumi/ccs_dx_contest</a>(public)</td></tr>
             <tr><th>配信設定</th><td><span class="mono">main</span> ブランチのルートから配信(<span class="mono">index.html</span> が入口)。<b>main に push すると1〜2分で公開に反映</b>される</td></tr>
-            <tr><th>管理者</th><td>リポジトリのオーナー(コラボレーター招待・公開設定を管理)</td></tr>
-            <tr><th>改修メンバー</th><td>コラボレーターとして招待された学生・スタッフ。main へ直接 push できる</td></tr>
+            <tr><th>管理者</th><td>リポジトリのオーナー(コラボレーター招待・公開設定を管理し、作業状況の把握に努める)</td></tr>
+            <tr><th>改修メンバー</th><td>コラボレーターとして招待されたメンバー(基本は1名が作業)。main へ直接 push できる</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="note"><b>使う道具</b> ── 開発は <b>Claude Code</b> に日本語で指示して進めます。Claude のアカウントは、個人利用のものではなく<b>チームで契約している Claude Team for Scientists</b> のものを使ってください(管理者からチームへの招待が届くので、先に有効化しておく)。</div>
+      <div class="note"><b>使う道具</b> ── 開発は <b>Claude Code</b> に日本語で指示して進めます。お使いの Claude アカウントのプラン(Claude Team for Scientists 等)によってこの要領の手順が変わることはありません。</div>
     </div>
   </div>
 
@@ -138,7 +137,6 @@
         <ol class="steps">
           <li>リポジトリの <b>Settings → Collaborators → Add people</b> で、メンバーの GitHub ユーザー名を入力して招待する。</li>
           <li>権限は既定の <b>Write</b>(push 可)でよい。</li>
-          <li>あわせて Claude Team for Scientists の管理画面から、メンバーを<b>チームに招待</b>しておく(Claude Code のサインインに必要)。</li>
         </ol>
       </div>
     </div>
@@ -158,7 +156,7 @@ gh auth login</code></pre></div>
         <li><b>Claude Code</b> を入れる。
           <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル · macOS(Windows は irm https://claude.ai/install.ps1 | iex)</span><button class="cb-copy">COPY</button></div><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
         </li>
-        <li><span class="mono">claude</span> を起動してサインインする。<b>必ず Claude Team for Scientists のアカウント(チーム招待を受けたメールアドレス)を選ぶ</b>こと。個人アカウントで入ってしまった場合は、Claude Code 内で <span class="mono">/login</span> と打てばアカウントを切り替えられる。</li>
+        <li><span class="mono">claude</span> を起動し、案内に従って自分の Claude アカウントでサインインする(初回のみ。複数アカウントを持っている場合は、Claude Code 内で <span class="mono">/login</span> と打てば切り替えられる)。</li>
         <li>コンテストサイトのリポジトリを clone して、そのフォルダで Claude Code を起動する。
           <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>gh repo clone Nozomi-Nishiumi/ccs_dx_contest
 cd ccs_dx_contest
@@ -178,10 +176,10 @@ claude</code></pre></div>
   <div class="part" id="p4"><span class="no">PART 04</span><h2>改修サイクル — pull → 指示 → 確認 → 反映</h2><span class="rule"></span></div>
   <div class="card spine">
     <div class="card-body">
-      <h3>共同作業の基本の一巡</h3>
-      <p class="sub">複数人で同じ main を触るので、「作業前に pull」だけは徹底する</p>
+      <h3>作業の基本の一巡</h3>
+      <p class="sub">基本はコラボレーター1名が作業し、管理者は状況の把握に努める体制</p>
       <ol class="steps">
-        <li><b>作業を始めるとき、必ず最新化する</b>(他のメンバーの変更を取り込む)。Claude Code に「まず pull して最新にして」と頼むか、ターミナルで:
+        <li><b>もし他の人がウェブサイト更新作業をしていると思われる場合には</b>、作業を始める前に最新化する(その人の変更を取り込む)。Claude Code に「まず pull して最新にして」と頼むか、ターミナルで:
           <div class="cb"><div class="cb-head"><span class="cb-lang">ターミナル</span><button class="cb-copy">COPY</button></div><pre><code>git pull</code></pre></div>
         </li>
         <li><b>改修内容を具体的に指示する</b>。どのページの・どの箇所を・どうしたいか。
@@ -190,30 +188,16 @@ claude</code></pre></div>
 同じデザインルールで。まだ push はしないで。</pre></div>
         </li>
         <li><b>手元のブラウザで確認する</b>(<span class="mono">open index.html</span>、または「ブラウザで開いて」)。公開前に必ず自分の目で見る。</li>
-        <li>問題なければ<b>反映を頼む</b>。push した時点で1〜2分後に公開される。
+        <li><b>内容が整ったら公開する</b>。push した時点で1〜2分後に公開される。
           <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 反映指示の例</span><button class="cb-copy">COPY</button></div><pre>OK。リンク切れと日付の食い違いがないか確認したうえで、内容が
 分かる日本語のコミットメッセージでコミットして push して。
 公開URLに反映されたことも確認して。</pre></div>
         </li>
         <li><b>公開 URL で最終確認</b>。反映が見えないときはハードリロード(<span class="kbd">⇧⌘R</span> / <span class="kbd">Ctrl+F5</span>)、それでも古ければビルド中なので1〜2分待つ。</li>
       </ol>
+      <div class="note warn"><b>公開のタイミングについて</b> ── push = 即・公開されるので、立ち上げ段階ではあまり気にすることはありませんが、今後受賞者など個人名が出る際にはご注意ください(push した時点でページもリポジトリの中身も誰でも見られる状態になります)。</div>
       <div class="note"><b>push が弾かれたら</b> ── 自分の作業中に他のメンバーが push した合図です。慌てず Claude Code に「pull して、コンフリクトがあれば解消してから push し直して」と頼めば整理してくれます。</div>
       <div class="note"><b>大きな改修は分けて</b> ── デザイン全体の変更やページ構成の組み替えは、事前に管理者へ一声かけたうえで、「先に変更案を見せて」「一旦コミットしてから着手して」と段階を分けると安全です。</div>
-    </div>
-  </div>
-
-  <!-- ===== PART 5 ===== -->
-  <div class="part" id="p5"><span class="no">PART 05</span><h2>公開ルール — コンテスト運営の注意</h2><span class="rule"></span></div>
-  <div class="card spine" style="--accent:#C0472B">
-    <div class="card-body">
-      <h3>push = 即・全世界公開</h3>
-      <p class="sub">ページだけでなく、リポジトリの中身もすべて公開される</p>
-      <ul class="pts">
-        <li><b>置いてはいけないもの</b> ── 応募者の個人情報、審査資料・採点表、<b>発表前の受賞者情報</b>、API キーやパスワード。ページに載せなくても、<b>リポジトリに push した時点で誰でも見られる</b>。</li>
-        <li><b>結果発表は当日に作って当日に push</b> ── 「発表ページを作って発表日まで置いておく」は NG。下書きが必要ならリポジトリの<b>外</b>(手元の別フォルダ等)で用意する。</li>
-        <li><b>日付・要項の変更は全ページ横断で</b> ── 締切・発表日・提出物などは複数ページに散りやすい。変更時は「全ページ横断で更新して、最後に食い違いがないか確認して」まで頼む。</li>
-        <li><b>迷ったら push しない</b> ── 公開してよいか判断がつかない内容は、push 前に管理者に確認する。公開の取り消しはできても、<b>見られた事実は取り消せない</b>。</li>
-      </ul>
     </div>
   </div>
 

@@ -81,8 +81,8 @@
 <div class="wrap">
 
   <p class="eyebrow">実施要領 · Claude Code / GitHub Pages</p>
-  <h1>コンテストサイトをつくり、<br>GitHub Pages で公開する</h1>
-  <p class="lede">学生向けコンテスト企画の公式 Web サイト(概要・応募要項・スケジュール・結果発表などを載せる)を開発・公開するときの実施要領です。<b>開発作業は Claude Code に日本語で指示して進め、公開は GitHub Pages</b>(無料の静的ホスティング)を使います。公開先はリポジトリ <a href="https://github.com/Nozomi-Nishiumi/ccs_dx_contest" target="_blank" rel="noopener">ccs_dx_contest</a>(公開 URL: <a href="https://nozomi-nishiumi.github.io/ccs_dx_contest/" target="_blank" rel="noopener">nozomi-nishiumi.github.io/ccs_dx_contest</a>)。同じ要領はこの資料サイト自体の運用にも使われています。</p>
+  <h1>Claude Code でつくり、<br>GitHub Pages で公開する</h1>
+  <p class="lede">Web サイト(資料サイト・プロジェクト紹介・イベント告知・デモページ等)を開発・公開するときの一般的な実施要領です。<b>開発作業は Claude Code に日本語で指示して進め、公開は GitHub Pages</b>(無料の静的ホスティング)を使います。実例として、いま見ているこの資料サイト自体がこの要領で開発・運用されています。すでに公開済みのサイトを共同で改修する場合(CCS DX コンテスト)は<a href="ccs-dx-contest-guide.html">専用の実施要領</a>へ。</p>
 
   <nav class="toc">
     <a href="#p1">01 準備(初回のみ)</a>
@@ -133,17 +133,17 @@
           <p class="chip-label" style="font-size:12px;color:var(--muted);margin:10px 0 0">Git 管理にしておく利点:①失敗しても「さっきの変更を元に戻して」で直前のコミットに戻れる ②コミット履歴が「いつ・何を・なぜ変えたか」の開発記録になる ③PART 03 の公開(push)がそのままできる。</p>
         </li>
         <li>最初の指示で、<b>サイトの目的・想定読者・ページ構成・デザインの雰囲気</b>をまとめて伝える。
-          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 最初の指示の例</span><button class="cb-copy">COPY</button></div><pre>学生向けDXコンテストの公式サイトを作りたい。読者は応募を検討する
-学生。トップ(コンテスト概要とスケジュール)、応募要項ページ、
-FAQページの3枚構成から始める。静的なHTMLのみ・外部依存は
-Google Fonts 程度・スマホでも読めるレイアウトで。締切などの重要な
-日付が目立つデザインにして。まず index.html から作って。</pre></div>
+          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 最初の指示の例</span><button class="cb-copy">COPY</button></div><pre>研究室の資料サイトを作りたい。読者は配属されたばかりの学生。
+トップページ(資料一覧)と、環境構築の解説ページ2枚から始める。
+静的なHTMLのみ・外部依存は Google Fonts 程度・スマホでも読める
+レイアウトで。落ち着いた配色で、コードブロックにはコピーボタンを
+つけて。まず index.html から作って。</pre></div>
         </li>
         <li>生成されたページを<b>ブラウザで開いて確認</b>する(<span class="mono">open index.html</span> / Windows は <span class="mono">start index.html</span>。Claude Code に「開いて」と頼んでもよい)。</li>
         <li>修正も会話で頼む。<b>どのページの・どの箇所を・どうしたいか</b>を具体的に。
-          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 修正指示の例</span><button class="cb-copy">COPY</button></div><pre>応募要項ページの「提出物」の説明が長すぎるので箇条書きに整理して。
-あとトップページのスケジュール表に「結果発表」の行を追加して。
-できたらコミットしておいて。</pre></div>
+          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 修正指示の例</span><button class="cb-copy">COPY</button></div><pre>index.html のカードの説明文が長すぎる。各カード2行以内に要約して。
+あと setup ページの手順 03 は Mac と Windows で分岐するので、
+横並び2列のレイアウトにして。できたらコミットしておいて。</pre></div>
         </li>
         <li>大きく作り替えるときは、<b>直前にコミットしてから</b>着手させる(「いまの状態を一旦コミットしてから、トップページを作り直して」)。気に入らなければ「作り直す前の状態に戻して」で復元できる。</li>
       </ol>
@@ -157,14 +157,13 @@ Google Fonts 程度・スマホでも読めるレイアウトで。締切など�
     <div class="card-body">
       <h3>公開は Claude Code に丸ごと頼む</h3>
       <p class="sub">リポジトリ作成 → push → Pages 有効化 → URL 確認までを一括で</p>
-      <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 公開指示の例</span><button class="cb-copy">COPY</button></div><pre>このフォルダの内容を GitHub の public リポジトリ「ccs_dx_contest」
-にプッシュして、GitHub Pages(main ブランチのルートから配信)で
-公開して。公開URLで表示されるところまで確認して。</pre></div>
-      <div class="note"><b>今回のコンテストサイトの公開先</b> ── リポジトリ <a href="https://github.com/Nozomi-Nishiumi/ccs_dx_contest" target="_blank" rel="noopener">Nozomi-Nishiumi/ccs_dx_contest</a> は上記の要領で作成・設定済みで、<a href="https://nozomi-nishiumi.github.io/ccs_dx_contest/" target="_blank" rel="noopener">https://nozomi-nishiumi.github.io/ccs_dx_contest/</a> で配信されています(現在は準備中ページ)。以後はこのリポジトリに push すれば公開内容が更新されます。</div>
+      <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 公開指示の例</span><button class="cb-copy">COPY</button></div><pre>このフォルダの内容を GitHub の新しい public リポジトリ
+「lab-website」にプッシュして、GitHub Pages(main ブランチの
+ルートから配信)で公開して。公開URLで表示されるところまで確認して。</pre></div>
       <div class="note"><b>実行されること</b> ── <span class="mono">gh repo create</span> → <span class="mono">git push</span> → Pages の有効化 → ビルド完了と公開 URL(<span class="mono">https://&lt;ユーザー名&gt;.github.io/&lt;リポジトリ名&gt;/</span>)の確認。git 操作やリポジトリ作成の前には Claude Code が確認を求めてくるので、内容を見て承認する。</div>
     </div>
   </div>
-  <div class="note warn" style="margin:-6px 0 26px"><b>公開前の注意(コンテスト運営では特に)</b> ── public リポジトリ+Pages は<b>ページだけでなくリポジトリの中身も全世界に公開</b>されます。API キー・パスワードはもちろん、<b>応募者の個人情報・審査資料・発表前の受賞者情報</b>は、ページにもリポジトリにも絶対に置かないこと。「結果発表ページを発表日まで下書きとしてリポジトリに置いておく」も NG です(push した時点で誰でも見られる)。発表日に作って push するか、手元のフォルダ外で下書きしておくこと。</div>
+  <div class="note warn" style="margin:-6px 0 26px"><b>公開前の注意</b> ── public リポジトリ+Pages は<b>ページだけでなくリポジトリの中身も全世界に公開</b>されます。API キー・パスワード・未発表の研究データ・個人情報は、ページにもリポジトリにも絶対に置かないこと。頼むときも「APIキーは載せず、各自で取得する形にして」と一言添えるのが安全です。</div>
 
   <!-- ===== PART 4 ===== -->
   <div class="part" id="p4"><span class="no">PART 04</span><h2>更新の運用 — 直して、反映して</h2><span class="rule"></span></div>
@@ -174,14 +173,13 @@ Google Fonts 程度・スマホでも読めるレイアウトで。締切など�
       <p class="sub">ローカルの作業フォルダが原本。反映は Claude Code に任せる</p>
       <ol class="steps">
         <li>作業フォルダで <span class="mono">claude</span> を起動し、<b>修正内容と「反映して」</b>をセットで頼む。
-          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 更新指示の例</span><button class="cb-copy">COPY</button></div><pre>応募締切を10月31日に延長することになった。トップのスケジュールと
-応募要項ページの締切表記をすべて更新し、トップに「締切延長の
-お知らせ」を1件追加して。修正できたら GitHub Pages に反映して。</pre></div>
+          <div class="pb"><div class="pb-head"><span class="pb-lang">PROMPT · 更新指示の例</span><button class="cb-copy">COPY</button></div><pre>rstudio-setup.html の PART 03 に、パッケージ更新の手順を1項目
+追加して。修正できたら GitHub Pages に反映して。</pre></div>
         </li>
         <li>Claude Code が編集 → commit → push → <b>Pages のビルド完了まで確認</b>して報告してくる。</li>
         <li>公開 URL をブラウザで開いて確認する。反映が見えないときはハードリロード(<span class="kbd">⇧⌘R</span> / <span class="kbd">Ctrl+F5</span>)。それでも古い場合はビルド中なので1〜2分待つ。</li>
       </ol>
-      <div class="note"><b>コツ</b> ── 「ついでにリンク切れがないか確認して」「締切の日付が全ページで一致しているか確認して」のように、<b>反映前の検証も一緒に頼む</b>と事故が減ります。コンテストサイトは日付・要項の食い違いが最も起きやすいので、日付を変えるときは必ず「全ページ横断で」と指示すること。大きな変更のときは「先に変更案を見せて」と段階を分けるのも有効。</div>
+      <div class="note"><b>コツ</b> ── 「ついでにリンク切れがないか確認して」「日付や名称が全ページで一致しているか確認して」のように、<b>反映前の検証も一緒に頼む</b>と事故が減ります。大きな変更のときは「先に変更案を見せて」と段階を分けるのも有効。</div>
     </div>
   </div>
 
